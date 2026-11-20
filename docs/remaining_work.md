@@ -19,9 +19,9 @@ sqlite3 audit.db "SELECT * FROM audit_events ORDER BY event_date LIMIT 5;"
 
 ---
 
-## 1. `search/queries.py`: the queries ⭐ most important
+## 1. `search/queries.py`: the queries ✅ done in issue #2
 
-Stubs with signatures and docstrings are already in the file.
+The notes below are kept as an explanation of how the queries work.
 
 **`row_to_transaction(row)`**: the columns have the same names as the `Transaction` fields, so
 `Transaction(**dict(row))` almost works. You need to leave out the `id` column.
@@ -80,13 +80,14 @@ Read the docstrings in each file. Key points:
   export back with `csv.DictReader`, and check every value. Include the `"Smith, J"` row from
   `corrupted.csv` to prove quoting works.
 
-## 3. `cli.py`: connect `find` and `range`
+## 3. `cli.py`: table output and `--export` for `find` and `range`
 
-The argument parsers already exist. Replace `handler=_not_built_yet` with real handlers that:
-open the DB, call the query, print `format_table(...)`, and if `--export` is given call
-`write_csv(...)`. Catch `ValueError` (bad date, empty prefix) and print `error: ...` with
-exit code 1, like `cmd_import` does. Update the tests in `tests/e2e/test_cli.py`, because the
-"not built yet" test will then fail. That's expected.
+`find` and `range` already work (issue #2) and print plain tab-separated lines through
+`print_results()` in `cli.py`. What's left:
+- replace `print_results()` with `format_table(...)` once the formatter exists,
+- in `_run_search()`, replace the "--export is not built yet" branch with `write_csv(...)`,
+- update `test_unbuilt_features_say_so` in `tests/e2e/test_cli.py`, which will then fail.
+  That's expected.
 
 ## 4. `menu.py`: interactive menu
 
