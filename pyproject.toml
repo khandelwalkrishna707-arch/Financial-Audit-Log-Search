@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "audit-log-search"
+version = "0.1.0"
+description = "Offline CLI that indexes financial audit logs (CSV/JSON) in SQLite and searches them by transaction ID or date range."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []  # the core tool uses only the Python standard library
+
+[project.optional-dependencies]
+web = ["flask>=3.0"]
+
+[project.scripts]
+audit-search = "audit_search.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+audit_search = ["storage/schema.sql"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.coverage.run]
+source = ["audit_search"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+exclude_also = [
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]

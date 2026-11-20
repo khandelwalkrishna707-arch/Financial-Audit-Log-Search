@@ -224,3 +224,15 @@ For Claude/
 
 # macOS
 .DS_Store
+
+# ---- audit-log-search project rules ----
+# Local data: never commit real audit logs or databases
+*.db
+*.db-journal
+*.sqlite3
+exports/
+data/generated/
+
+# Editors
+.vscode/
+.idea/
