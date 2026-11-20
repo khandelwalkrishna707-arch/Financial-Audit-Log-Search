@@ -24,25 +24,26 @@ def test_host_is_localhost_only():
 
 def test_empty_form(client):
     page = client.get("/").get_data(as_text=True)
-    assert "Audit log search" in page and "<table>" not in page
+    assert "Audit Log Search" in page and "<table>" not in page and "Start a search" in page
 
 
 def test_search_by_id(client):
     page = client.get("/?transaction_id=TX-1002").get_data(as_text=True)
-    assert "1 result" in page and "1000.50" in page and "WITHDRAWAL" in page
+    assert "1 event<" in page and "1,000.50" in page and "WITHDRAWAL" in page
 
 
 def test_prefix_range_and_filters(client):
     page = client.get("/?transaction_id=TX-100&prefix=on&action=deposit").get_data(as_text=True)
-    assert "2 results" in page
+    assert "2 events<" in page
     page = client.get("/?start=2026-03-14&end=2026-03-14&min_amount=5").get_data(as_text=True)
-    assert "2 results" in page and "TX-1003" not in page
+    assert "2 events<" in page and "TX-1003" not in page
+    assert "Total amount" in page and "2,250.50" in page and "Events by action" in page
 
 
 def test_no_results_and_errors(client):
-    assert "No results." in client.get("/?transaction_id=NOPE").get_data(as_text=True)
+    assert "No events match" in client.get("/?transaction_id=NOPE").get_data(as_text=True)
     page = client.get("/?start=2026-03-15&end=2026-03-01").get_data(as_text=True)
-    assert "Error:" in page and "after end date" in page
+    assert 'role="alert"' in page and "after end date" in page
 
 
 def test_html_is_escaped(client):
@@ -87,3 +88,15 @@ def test_web_command_without_flask(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(builtins, "__import__", no_web)
     assert cli.main(["web", "--db", str(tmp_path / "a.db")]) == 1
     assert "needs Flask" in capsys.readouterr().err
+
+
+def test_overview_cards(client):
+    page = client.get("/").get_data(as_text=True)
+    assert "Records indexed" in page and ">4<" in page and "2026-03-14" in page
+
+
+def test_money_display():
+    from audit_search.web import money
+    assert money(123456789) == "1,234,567.89"
+    assert money(-5) == "-0.05"
+    assert money(None) == ""

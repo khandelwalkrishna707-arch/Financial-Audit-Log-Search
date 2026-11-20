@@ -84,3 +84,13 @@ def test_generated_json_formats_import(tmp_path, fmt):
     source = tmp_path / f"audit.{fmt}"
     generate_synthetic_data.write(generate_synthetic_data.make_rows(300, seed=9), source, fmt)
     assert main(["import", "--file", str(source), "--db", str(tmp_path / "a.db")]) == 0
+
+
+def test_colored_import_summary(tmp_path, fixtures_dir, capsys, monkeypatch):
+    monkeypatch.setattr("audit_search.cli.use_color", lambda: True)
+    db = str(tmp_path / "a.db")
+    assert main(["import", "--file", str(fixtures_dir / "corrupted.csv"), "--db", db]) == 0
+    out = capsys.readouterr().out
+    assert "\033[1;32m3\033[0m" in out and "\033[1;31m5\033[0m" in out
+    assert main(["find", "--id", "TX-2001", "--db", db, "--export", str(tmp_path / "o.csv")]) == 0
+    assert "\033[32mExported 1 row" in capsys.readouterr().out

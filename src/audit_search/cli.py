@@ -26,6 +26,7 @@ from audit_search import __version__
 from audit_search.config import DEFAULT_DB_PATH, DEFAULT_DUPLICATE_POLICY, DUPLICATE_POLICIES
 from audit_search.export.csv_writer import ExportError, write_csv
 from audit_search.export.formatter import format_table
+from audit_search.export.style import paint, use_color
 from audit_search.importer import import_file
 from audit_search.models import ImportSummary
 from audit_search.search.filters import Filters
@@ -124,16 +125,23 @@ def cmd_import(args: argparse.Namespace) -> int:
 
 
 def print_import_summary(summary: ImportSummary, seconds: float) -> None:
-    print(f"Imported {summary.source_file} in {seconds:.2f}s")
+    color = use_color()
+
+    def count(label: str, value: int, style: str) -> None:
+        shown = paint(str(value), "bold", style, enabled=color and value > 0)
+        print(f"  {label:<19}: {shown}")
+
+    print(paint(f"Imported {summary.source_file} in {seconds:.2f}s", "bold", enabled=color))
     print(f"  rows read          : {summary.read}")
-    print(f"  inserted           : {summary.inserted}")
-    print(f"  duplicates skipped : {summary.skipped_duplicates}")
-    print(f"  duplicates updated : {summary.updated}")
-    print(f"  rejected           : {summary.rejected}")
+    count("inserted", summary.inserted, "green")
+    count("duplicates skipped", summary.skipped_duplicates, "yellow")
+    count("duplicates updated", summary.updated, "yellow")
+    count("rejected", summary.rejected, "red")
     if summary.rejections:
-        print(f"Rejected rows (first {min(REJECTIONS_SHOWN, summary.rejected)}):")
+        print(paint(f"Rejected rows (first {min(REJECTIONS_SHOWN, summary.rejected)}):",
+                    "red", enabled=color))
         for rejection in summary.rejections[:REJECTIONS_SHOWN]:
-            print(f"  {rejection.location}: {rejection.reason}")
+            print(f"  {paint(rejection.location, 'dim', enabled=color)}: {rejection.reason}")
         if summary.rejected > REJECTIONS_SHOWN:
             print(f"  ... and {summary.rejected - REJECTIONS_SHOWN} more")
 
@@ -160,14 +168,15 @@ def _run_search(args: argparse.Namespace, **criteria) -> int:
     except (ValueError, sqlite3.Error) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
-    print(format_table(results))
+    print(format_table(results, color=use_color()))
     if args.export:
         try:
             written = write_csv(results, args.export)
         except ExportError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 1
-        print(f"Exported {written} row{'s' if written != 1 else ''} to {args.export}")
+        message = f"Exported {written} row{'s' if written != 1 else ''} to {args.export}"
+        print(paint(message, "green", enabled=use_color()))
     return 0
 
 

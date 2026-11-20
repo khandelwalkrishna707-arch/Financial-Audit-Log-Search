@@ -21,6 +21,7 @@ from pathlib import Path
 from audit_search.config import DEFAULT_DUPLICATE_POLICY
 from audit_search.export.csv_writer import ExportError, write_csv
 from audit_search.export.formatter import format_table
+from audit_search.export.style import use_color
 from audit_search.importer import import_file
 from audit_search.models import Transaction
 from audit_search.search.service import search
@@ -78,7 +79,7 @@ def run_menu(
                     criteria = {"start": ask("From date: "), "end": ask("To date: ")}
                 with closing(connect(db_path)) as conn:
                     last_results = search(conn, **criteria)
-                print_func(format_table(last_results))
+                print_func(format_table(last_results, color=print_func is print and use_color()))
             elif choice == "4":
                 if last_results is None:
                     print_func("Nothing to export yet. Run a search first (option 2 or 3).")

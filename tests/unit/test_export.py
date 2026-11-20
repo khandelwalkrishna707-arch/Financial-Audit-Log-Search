@@ -91,3 +91,35 @@ def test_empty_table_and_counts():
     assert format_table([]) == "No results."
     assert result_count(1) == "1 result"
     assert result_count(0) == "0 results"
+
+
+def test_colored_table_keeps_layout():
+    neg = Transaction("TX-9", "2026-03-16T00:00:00Z", "AC-9", "FEE_CHARGE", -500, None)
+    plain = format_table([TX, neg])
+    colored = format_table([TX, neg], color=True)
+    assert "\033[" in colored
+    assert strip_ansi(colored) == plain
+    assert "\033[31m" in colored  # negative amount / fee in red
+    assert format_table([], color=True) == "\033[33mNo results.\033[0m"
+
+
+def strip_ansi(text):
+    import re
+    return re.sub(r"\033\[[0-9;]*m", "", text)
+
+
+def test_use_color(monkeypatch):
+    from audit_search.export.style import paint, use_color
+
+    class Tty(io.StringIO):
+        def isatty(self):
+            return True
+
+    monkeypatch.delenv("NO_COLOR", raising=False)
+    monkeypatch.setenv("TERM", "xterm")
+    assert use_color(Tty())
+    assert not use_color(io.StringIO())
+    monkeypatch.setenv("NO_COLOR", "1")
+    assert not use_color(Tty())
+    assert paint("x", "nope") == "x"
+    assert paint("x", "bold", enabled=False) == "x"

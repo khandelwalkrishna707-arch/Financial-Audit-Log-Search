@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
+from audit_search.export.style import ACTION_COLORS, paint
 from audit_search.models import Transaction
 from audit_search.normalize.fields import cents_to_str
 
@@ -39,22 +40,47 @@ def result_count(count: int) -> str:
     return f"{count} result{'s' if count != 1 else ''}"
 
 
-def format_table(transactions: Sequence[Transaction]) -> str:
-    """Return the transactions as an aligned text table, or "No results." when empty."""
+def format_table(transactions: Sequence[Transaction], color: bool = False) -> str:
+    """Return the transactions as an aligned text table, or "No results." when empty.
+
+    With color=True the header, separators, action types and negative amounts are colored;
+    the layout is identical either way (colors are added after padding).
+    """
     if not transactions:
-        return "No results."
+        return paint("No results.", "yellow", enabled=color)
     rows = [_cells(tx) for tx in transactions]
     widths = [
         max(len(header), *(len(row[i]) for row in rows)) for i, header in enumerate(TABLE_HEADERS)
     ]
 
-    def line(cells: Sequence[str]) -> str:
+    def pad(header: str, cell: str, width: int) -> str:
+        return cell.rjust(width) if header in _RIGHT_ALIGNED else cell.ljust(width)
+
+    def cell_style(header: str, cell: str) -> tuple[str, ...]:
+        if cell == _MISSING:
+            return ("dim",)
+        if header == "transaction_id":
+            return ("bold",)
+        if header == "action_type":
+            return (ACTION_COLORS.get(cell, "cyan"),)
+        if header == "amount" and cell.startswith("-"):
+            return ("red",)
+        if header == "event_date":
+            return ("dim",)
+        return ()
+
+    def line(cells: Sequence[str], styles=None) -> str:
         parts = []
         for header, cell, width in zip(TABLE_HEADERS, cells, widths, strict=True):
-            parts.append(cell.rjust(width) if header in _RIGHT_ALIGNED else cell.ljust(width))
+            text = pad(header, cell, width)
+            if header == TABLE_HEADERS[-1]:
+                text = text.rstrip()  # no trailing spaces, colored or not
+            style = styles or cell_style(header, cell)
+            parts.append(paint(text, *style, enabled=color))
         return "  ".join(parts).rstrip()
 
-    lines = [line(TABLE_HEADERS), line(["-" * w for w in widths])]
+    lines = [line(TABLE_HEADERS, ("bold", "cyan")),
+             line(["-" * w for w in widths], ("dim",))]
     lines.extend(line(row) for row in rows)
-    lines.append(result_count(len(rows)))
+    lines.append(paint(result_count(len(rows)), "bold", enabled=color))
     return "\n".join(lines)

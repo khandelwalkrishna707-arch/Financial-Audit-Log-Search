@@ -61,3 +61,18 @@ def insert_batch(
 
 def count_events(conn: sqlite3.Connection) -> int:
     return conn.execute("SELECT COUNT(*) FROM audit_events").fetchone()[0]
+
+
+_OVERVIEW_SQL = """
+    SELECT COUNT(*) AS events,
+           MIN(event_date) AS first_date,
+           MAX(event_date) AS last_date,
+           COUNT(DISTINCT source_file) AS files
+      FROM audit_events
+"""
+
+
+def database_overview(conn: sqlite3.Connection) -> dict[str, object]:
+    """How many events are stored, the date span they cover, and how many files they came from."""
+    row = conn.execute(_OVERVIEW_SQL).fetchone()
+    return {"events": row[0], "first_date": row[1], "last_date": row[2], "files": row[3]}

@@ -5,66 +5,213 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Audit Log Search</title>
 <style>
-  :root { --bg:#f7f7f5; --fg:#1d1d1b; --muted:#6b6b66; --card:#fff; --line:#e2e2dc; --accent:#2457c5; --err:#b3261e; }
-  @media (prefers-color-scheme: dark) { :root { --bg:#151514; --fg:#ececea; --muted:#9a9a94; --card:#1f1f1d; --line:#33332f; --accent:#8fb0ff; --err:#ff8a80; } }
-  * { box-sizing: border-box; }
-  body { margin:0; font:15px/1.45 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
-  main { max-width:1100px; margin:0 auto; padding:24px 16px; }
-  h1 { font-size:22px; margin:0 0 4px; }
-  p.sub { color:var(--muted); margin:0 0 20px; }
-  form { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px;
-         display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
-  label { display:flex; flex-direction:column; font-size:13px; color:var(--muted); gap:4px; }
-  label.check { flex-direction:row; align-items:center; gap:6px; }
-  input[type=text] { font:inherit; padding:7px 9px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--fg); }
-  .actions { display:flex; gap:8px; align-items:end; }
-  button, a.btn { font:inherit; padding:8px 14px; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; text-decoration:none; cursor:pointer; }
-  a.btn.secondary { background:transparent; color:var(--accent); }
-  .error { color:var(--err); margin:16px 0; }
-  .meta { margin:16px 0 8px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
-  .table-wrap { overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:10px; }
-  table { border-collapse:collapse; width:100%; font-size:14px; }
-  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); white-space:nowrap; }
-  th { font-weight:600; color:var(--muted); }
-  td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  :root {
+    --bg:#f4f6fa; --fg:#14213d; --muted:#5f6b85; --card:#ffffff; --line:#e3e8f1; --soft:#f0f3f9;
+    --accent:#3557e0; --accent-2:#6a3df0; --accent-fg:#ffffff; --err-bg:#fdecec; --err:#b42318;
+    --shadow:0 1px 2px rgba(20,33,61,.06),0 6px 20px rgba(20,33,61,.06);
+    --green:#127a4a; --green-bg:#e3f6ec; --amber:#8a5a00; --amber-bg:#fff3d6; --blue:#1d4ed8; --blue-bg:#e4ecff;
+    --purple:#6b2fd6; --purple-bg:#efe7ff; --red:#b42318; --red-bg:#fde8e6; --gray:#4b5563; --gray-bg:#eef0f3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:#0d1220; --fg:#e7ecf6; --muted:#97a3bd; --card:#151c2e; --line:#26304a; --soft:#1b2338;
+      --accent:#7b96ff; --accent-2:#a47bff; --accent-fg:#0d1220; --err-bg:#3a1515; --err:#ff9a8f;
+      --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+      --green:#5fd39a; --green-bg:#123527; --amber:#f4c15d; --amber-bg:#3a2c0c; --blue:#8fb0ff; --blue-bg:#17264d;
+      --purple:#c3a5ff; --purple-bg:#2b1d4f; --red:#ff9a8f; --red-bg:#3d1717; --gray:#c4cad6; --gray-bg:#262d3d;
+    }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+  header.top { background:linear-gradient(120deg,var(--accent),var(--accent-2)); color:#fff; }
+  header.top .inner { max-width:1180px; margin:0 auto; padding:22px 16px 64px; display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+  .brand { display:flex; gap:12px; align-items:center; }
+  .logo { width:40px; height:40px; border-radius:10px; background:rgba(255,255,255,.18); display:grid; place-items:center; }
+  h1 { font-size:21px; margin:0; letter-spacing:-.01em; }
+  .tagline { margin:2px 0 0; opacity:.85; font-size:13.5px; }
+  .pill { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.28); padding:5px 11px; border-radius:999px; font-size:12.5px; }
+  .dot { width:7px; height:7px; border-radius:50%; background:#5ff2a6; box-shadow:0 0 0 3px rgba(95,242,166,.25); }
+  main { max-width:1180px; margin:-46px auto 0; padding:0 16px 48px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-bottom:16px; }
+  .stat { padding:14px 16px; }
+  .stat .label { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+  .stat .value { font-size:22px; font-weight:650; margin-top:2px; font-variant-numeric:tabular-nums; }
+  .stat .hint { font-size:12.5px; color:var(--muted); }
+  form.search { padding:18px; }
+  .tabs { display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap; }
+  .tabs span { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); align-self:center; margin-right:6px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:12px; }
+  fieldset { border:0; padding:0; margin:0 0 14px; }
+  legend { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:8px; padding:0; }
+  label { display:flex; flex-direction:column; font-size:13px; color:var(--muted); gap:5px; }
+  label.check { flex-direction:row; align-items:center; gap:8px; align-self:end; padding-bottom:9px; color:var(--fg); }
+  input[type=text] { font:inherit; padding:8px 11px; border:1px solid var(--line); border-radius:8px; background:var(--soft); color:var(--fg); transition:border-color .15s, box-shadow .15s; }
+  input[type=text]:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); background:var(--card); }
+  .actions { display:flex; gap:8px; justify-content:flex-end; align-items:center; flex-wrap:wrap; border-top:1px solid var(--line); padding-top:14px; }
+  .examples { margin-right:auto; font-size:13px; color:var(--muted); }
+  .examples a { color:var(--accent); text-decoration:none; margin-right:10px; }
+  .examples a:hover { text-decoration:underline; }
+  button, a.btn { font:inherit; font-weight:600; font-size:14px; padding:8px 16px; border-radius:8px; border:1px solid transparent; background:var(--accent); color:var(--accent-fg); text-decoration:none; cursor:pointer; display:inline-flex; gap:6px; align-items:center; }
+  button:hover, a.btn:hover { filter:brightness(1.07); }
+  a.btn.ghost { background:transparent; color:var(--fg); border-color:var(--line); }
+  .error { background:var(--err-bg); color:var(--err); border-radius:10px; padding:12px 14px; margin:16px 0; font-weight:500; }
+  .summary { display:grid; grid-template-columns:2fr 3fr; gap:12px; margin:16px 0; }
+  @media (max-width:760px) { .summary { grid-template-columns:1fr; } }
+  .summary .card { padding:16px; }
+  .kpis { display:grid; grid-template-columns:1fr 1fr; gap:12px 16px; }
+  .bars { display:flex; flex-direction:column; gap:7px; }
+  .bar { display:grid; grid-template-columns:120px 1fr 44px; gap:10px; align-items:center; font-size:13px; }
+  .bar .track { background:var(--soft); border-radius:6px; height:10px; overflow:hidden; }
+  .bar .fill { height:100%; border-radius:6px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); }
+  .bar .n { text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .results-head { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; padding:14px 16px; border-bottom:1px solid var(--line); }
+  .results-head h2 { font-size:16px; margin:0; }
+  .results-head .count { color:var(--muted); font-weight:400; margin-left:6px; }
+  .table-wrap { overflow:auto; max-height:70vh; }
+  table { border-collapse:separate; border-spacing:0; width:100%; font-size:14px; }
+  th, td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th { position:sticky; top:0; background:var(--card); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:600; z-index:1; }
+  tbody tr:nth-child(even) td { background:color-mix(in srgb, var(--soft) 55%, transparent); }
+  tbody tr:hover td { background:var(--soft); }
+  td.id { font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-weight:600; font-size:13px; }
+  td.date { color:var(--muted); font-variant-numeric:tabular-nums; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; font-weight:550; }
+  td.neg { color:var(--red); }
+  td.muted { color:var(--muted); }
+  .badge { display:inline-block; padding:2px 9px; border-radius:999px; font-size:12px; font-weight:600; letter-spacing:.02em; background:var(--gray-bg); color:var(--gray); }
+  .b-DEPOSIT, .b-REPAYMENT { background:var(--green-bg); color:var(--green); }
+  .b-WITHDRAWAL { background:var(--amber-bg); color:var(--amber); }
+  .b-TRANSFER { background:var(--blue-bg); color:var(--blue); }
+  .b-DISBURSEMENT { background:var(--purple-bg); color:var(--purple); }
+  .b-FEE_CHARGE { background:var(--red-bg); color:var(--red); }
+  .empty { text-align:center; padding:48px 16px; color:var(--muted); }
+  .empty .big { font-size:17px; color:var(--fg); font-weight:600; margin-bottom:4px; }
+  footer { text-align:center; color:var(--muted); font-size:12.5px; margin-top:28px; }
 </style>
 </head>
 <body>
+<header class="top">
+  <div class="inner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M8 11h6M11 8v6"/></svg>
+      </div>
+      <div>
+        <h1>Audit Log Search</h1>
+        <p class="tagline">Find financial audit events by transaction ID or date range</p>
+      </div>
+    </div>
+    <span class="pill"><span class="dot"></span>Offline · running on 127.0.0.1</span>
+  </div>
+</header>
+
 <main>
-  <h1>Audit log search</h1>
-  <p class="sub">Local only (127.0.0.1). Search by transaction ID or by date range, then narrow with filters.</p>
-  <form method="get" action="/">
-    <label>Transaction ID <input type="text" name="transaction_id" value="{{ form.transaction_id }}" placeholder="TX-000123"></label>
-    <label class="check"><input type="checkbox" name="prefix" {% if form.prefix == 'on' %}checked{% endif %}> Prefix match</label>
-    <label>From date <input type="text" name="start" value="{{ form.start }}" placeholder="2026-01-01"></label>
-    <label>To date <input type="text" name="end" value="{{ form.end }}" placeholder="2026-03-31"></label>
-    <label>Account <input type="text" name="account" value="{{ form.account }}"></label>
-    <label>User <input type="text" name="user" value="{{ form.user }}"></label>
-    <label>Action <input type="text" name="action" value="{{ form.action }}" placeholder="DEPOSIT"></label>
-    <label>Min amount <input type="text" name="min_amount" value="{{ form.min_amount }}"></label>
-    <label>Max amount <input type="text" name="max_amount" value="{{ form.max_amount }}"></label>
-    <div class="actions"><button type="submit">Search</button><a class="btn secondary" href="/">Clear</a></div>
+  <section class="stats" aria-label="Database overview">
+    <div class="card stat"><div class="label">Records indexed</div>
+      <div class="value">{{ "{:,}".format(overview.events) if overview else "0" }}</div>
+      <div class="hint">{% if overview and overview.files %}from {{ overview.files }} file{{ '' if overview.files == 1 else 's' }}{% else %}import a file to begin{% endif %}</div></div>
+    <div class="card stat"><div class="label">Earliest event</div>
+      <div class="value">{{ overview.first_date[:10] if overview and overview.first_date else "–" }}</div>
+      <div class="hint">UTC</div></div>
+    <div class="card stat"><div class="label">Latest event</div>
+      <div class="value">{{ overview.last_date[:10] if overview and overview.last_date else "–" }}</div>
+      <div class="hint">UTC</div></div>
+    <div class="card stat"><div class="label">Last search</div>
+      <div class="value">{{ "{:,}".format(total) if results is not none and not error else "–" }}</div>
+      <div class="hint">{% if results is not none and not error %}matching event{{ '' if total == 1 else 's' }}{% else %}no search yet{% endif %}</div></div>
+  </section>
+
+  <form class="card search" method="get" action="/">
+    <fieldset>
+      <legend>Search by</legend>
+      <div class="grid">
+        <label>Transaction ID <input type="text" name="transaction_id" value="{{ form.transaction_id }}" placeholder="TX-000123"></label>
+        <label class="check"><input type="checkbox" name="prefix" {% if form.prefix == 'on' %}checked{% endif %}> Starts with</label>
+        <label>From date <input type="text" name="start" value="{{ form.start }}" placeholder="2026-01-01"></label>
+        <label>To date <input type="text" name="end" value="{{ form.end }}" placeholder="2026-03-31"></label>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Narrow results (optional)</legend>
+      <div class="grid">
+        <label>Account <input type="text" name="account" value="{{ form.account }}" placeholder="AC-1001"></label>
+        <label>User <input type="text" name="user" value="{{ form.user }}" placeholder="user07"></label>
+        <label>Action <input type="text" name="action" value="{{ form.action }}" placeholder="DEPOSIT"></label>
+        <label>Min amount <input type="text" name="min_amount" value="{{ form.min_amount }}" placeholder="0.00"></label>
+        <label>Max amount <input type="text" name="max_amount" value="{{ form.max_amount }}" placeholder="10000.00"></label>
+      </div>
+    </fieldset>
+    <div class="actions">
+      {% if overview and overview.first_date %}
+      <span class="examples">Try:
+        <a href="/?start={{ overview.first_date[:7] }}-01&end={{ overview.first_date[:10] }}">first day</a>
+        <a href="/?start={{ overview.first_date[:10] }}&end={{ overview.last_date[:10] }}&action=DEPOSIT">all deposits</a>
+      </span>
+      {% endif %}
+      <a class="btn ghost" href="/">Clear</a>
+      <button type="submit">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        Search</button>
+    </div>
   </form>
 
-  {% if error %}<p class="error" role="alert">Error: {{ error }}</p>{% endif %}
+  {% if error %}<div class="error" role="alert">⚠ {{ error }}</div>{% endif %}
+
+  {% if summary and not error %}
+  <section class="summary">
+    <div class="card">
+      <div class="kpis">
+        <div class="stat" style="padding:0"><div class="label">Total amount</div><div class="value">{{ money(summary.total_cents) }}</div></div>
+        <div class="stat" style="padding:0"><div class="label">Accounts</div><div class="value">{{ summary.accounts }}</div></div>
+        <div class="stat" style="padding:0"><div class="label">From</div><div class="value" style="font-size:16px">{{ summary.first[:10] }}</div></div>
+        <div class="stat" style="padding:0"><div class="label">To</div><div class="value" style="font-size:16px">{{ summary.last[:10] }}</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="stat" style="padding:0 0 10px"><div class="label">Events by action</div></div>
+      <div class="bars">
+        {% for action, n in summary.actions %}
+        <div class="bar"><span class="badge b-{{ action }}">{{ action }}</span>
+          <div class="track"><div class="fill" style="width: {{ (100 * n / summary.max_action) | round(1) }}%"></div></div>
+          <span class="n">{{ n }}</span></div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
 
   {% if results is not none and not error %}
-    <div class="meta">
-      <span>{{ total }} result{{ '' if total == 1 else 's' }}{% if total > max_rows %} (showing first {{ max_rows }}){% endif %}</span>
-      {% if total %}<a class="btn secondary" href="/export.csv?{{ query_string }}">Export CSV</a>{% endif %}
+  <section class="card" style="margin-top:16px">
+    <div class="results-head">
+      <h2>Results<span class="count">{{ "{:,}".format(total) }} event{{ '' if total == 1 else 's' }}{% if total > max_rows %}, showing first {{ max_rows }}{% endif %}</span></h2>
+      {% if total %}<a class="btn" href="/export.csv?{{ query_string }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>
+        Export CSV</a>{% endif %}
     </div>
     {% if results %}
     <div class="table-wrap"><table>
-      <thead><tr><th>Transaction ID</th><th>Event date (UTC)</th><th>Action</th><th>Amount</th><th>Account</th><th>User</th><th>Source file</th></tr></thead>
+      <thead><tr><th>Transaction ID</th><th>Event date (UTC)</th><th>Action</th><th style="text-align:right">Amount</th><th>Account</th><th>User</th><th>Source file</th></tr></thead>
       <tbody>
       {% for tx in results %}
-        <tr><td>{{ tx.transaction_id }}</td><td>{{ tx.event_date }}</td><td>{{ tx.action_type or '-' }}</td>
-            <td class="num">{{ money(tx.amount_cents) or '-' }}</td><td>{{ tx.account_id or '-' }}</td><td>{{ tx.user_id or '-' }}</td><td>{{ tx.source_file or '-' }}</td></tr>
+        {% set amount = money(tx.amount_cents) %}
+        <tr><td class="id">{{ tx.transaction_id }}</td>
+            <td class="date">{{ tx.event_date[:10] }} {{ tx.event_date[11:19] }}</td>
+            <td>{% if tx.action_type %}<span class="badge b-{{ tx.action_type }}">{{ tx.action_type }}</span>{% else %}<span class="muted">-</span>{% endif %}</td>
+            <td class="num{% if amount.startswith('-') %} neg{% endif %}">{{ amount or '-' }}</td>
+            <td>{{ tx.account_id or '-' }}</td><td>{{ tx.user_id or '-' }}</td><td class="muted">{{ tx.source_file or '-' }}</td></tr>
       {% endfor %}
       </tbody>
     </table></div>
-    {% else %}<p>No results.</p>{% endif %}
+    {% else %}
+    <div class="empty"><div class="big">No results</div>No events match this search. Try a wider date range or remove a filter.</div>
+    {% endif %}
+  </section>
+  {% elif not error %}
+  <div class="card empty" style="margin-top:16px"><div class="big">Start a search</div>Enter a transaction ID or a date range above.</div>
   {% endif %}
+
+  <footer>Your data never leaves this computer. Amounts are stored in exact cents; dates in ISO 8601 UTC.</footer>
 </main>
 </body>
 </html>
