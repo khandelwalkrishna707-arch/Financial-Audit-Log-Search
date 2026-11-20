@@ -1,0 +1,5 @@
+[
+  {"transactionId": "TX-3001", "date": "2026-02-01T10:00:00Z", "accountNo": "AC-9", "type": "DEPOSIT", "amount": 99.99, "user": "u9"},
+  {"transactionId": "TX-3002", "date": [2026, 2, 2], "accountNo": "AC-9", "type": {"id": 1, "value": "Withdrawal"}, "amount": 5, "user": "u9"},
+  {"transactionId": 3003, "date": 1770000000, "amount": "0.30"}
+]
