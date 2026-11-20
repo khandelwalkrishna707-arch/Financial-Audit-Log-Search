@@ -20,10 +20,11 @@ standard library.
 | Tests (unit, integration, end-to-end), CI with 85% coverage gate | ✅ done |
 | Search by transaction ID (exact / prefix) and date range | ✅ done (#2) |
 | Benchmark script, privacy guide, contributing guide | ✅ done |
-| Terminal table + CSV export, interactive menu | 🚧 week 2 |
-| Flask dashboard on localhost (stretch goal) | ⏳ later |
+| Terminal table, CSV export, filters (account, user, action, amount) | ✅ done |
+| Interactive terminal menu | ✅ done |
+| Flask dashboard on 127.0.0.1 (stretch goal) | ✅ done |
 
-See [docs/remaining_work.md](docs/remaining_work.md) for the week 2 plan.
+File formats (input columns, rejected rows, export layout): [docs/file_formats.md](docs/file_formats.md).
 
 ## Quick start
 
@@ -58,11 +59,30 @@ Rejected rows (first 17):
 
 ```bash
 audit-search import --file <path> [--on-duplicate skip|update] [--db audit.db]
-audit-search find   --id TX-98721 [--prefix]
-audit-search range  --from 2026-01-01 --to 2026-03-31
-audit-search menu                                       # week 2
-# --export out.csv on find / range                      # week 2
+audit-search find   --id TX-98721 [--prefix] [filters] [--export out.csv]
+audit-search range  --from 2026-01-01 --to 2026-03-31 [filters] [--export out.csv]
+audit-search menu                       # interactive menu
+audit-search web [--port 5000]          # local dashboard, needs: pip install -e ".[web]"
 ```
+
+Filters for `find` and `range`: `--account AC-1`, `--user u7`, `--action deposit`,
+`--min-amount 100`, `--max-amount 2500.50`.
+
+Example:
+
+```
+$ audit-search range --from 2026-01-01 --to 2026-01-31 --action deposit --min-amount 4000 --export big_deposits.csv
+transaction_id  event_date            action_type    amount  account_id  user_id
+--------------  --------------------  -----------  --------  ----------  -------
+TX-000045       2026-01-01T16:51:28Z  DEPOSIT      10455.40  AC-3078     user04
+...
+TX-000237       2026-01-30T23:05:04Z  DEPOSIT      34007.36  AC-1942     user25
+15 results
+Exported 15 rows to big_deposits.csv
+```
+
+The web dashboard (`audit-search web`) only listens on `127.0.0.1`, so it cannot be reached
+from other machines. It offers the same searches, filters and CSV export as the CLI.
 
 * `find --prefix` matches IDs that start with the text; `%` and `_` are ordinary characters.
 * `range` includes **both** days completely: `--to 2026-03-31` includes events up to

@@ -1,5 +1,9 @@
 # Remaining work: the search half (week 2)
 
+> **Status:** sections 1 to 6 and the Flask dashboard and extra filters from section 7 are
+> done. Still open: choosing a `LICENSE` with your mentor, batch folder import, import
+> provenance, and tagging `v1.0.0` after review.
+
 The **import half** is finished and tested: files go in, clean rows land in SQLite.
 Your half is the **search half**, the right-hand path of the PRD workflow diagram:
 
