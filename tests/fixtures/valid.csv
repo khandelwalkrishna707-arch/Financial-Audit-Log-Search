@@ -1,0 +1,5 @@
+transaction_id,event_date,account_id,action_type,amount,user_id
+TX-1001,2026-03-14T09:30:00Z,AC-1,deposit,1250.00,u1
+TX-1002,2026-03-14T15:00:00+05:30,AC-2,Withdrawal,"1,000.50",u2
+TX-1003,14/03/2026 23:59:59,AC-3,loan-repayment,0.10,u3
+TX-1004,2026-03-15,AC-4,DEPOSIT,,u4

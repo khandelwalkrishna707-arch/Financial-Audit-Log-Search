@@ -1,0 +1,4 @@
+# The core tool needs NO third-party packages: it uses only the Python standard library.
+#
+# Optional, only for the stretch-goal web dashboard (src/audit_search/web/):
+# flask>=3.0
