@@ -1,0 +1,1602 @@
+[
+ {
+  "transaction_id": "TX-000001",
+  "event_date": "2026-11-26T17:46:07Z",
+  "account_id": "AC-2500",
+  "action_type": "DEPOSIT",
+  "amount": "30288.69",
+  "user_id": "user11"
+ },
+ {
+  "transaction_id": "TX-000002",
+  "event_date": "2026-09-18 02:20:23",
+  "account_id": "AC-5121",
+  "action_type": "TRANSFER",
+  "amount": "17803.20",
+  "user_id": "user39"
+ },
+ {
+  "transaction_id": "TX-000003",
+  "event_date": "2026-09-22T19:10:28+05:30",
+  "account_id": "AC-8056",
+  "action_type": "FEE_CHARGE",
+  "amount": "12.3.4",
+  "user_id": "user33"
+ },
+ {
+  "transaction_id": "TX-000004",
+  "event_date": "31/07/2026 08:05:51",
+  "account_id": "AC-9225",
+  "action_type": "DISBURSEMENT",
+  "amount": "3014.55",
+  "user_id": "user02"
+ },
+ {
+  "transaction_id": "TX-000005",
+  "event_date": "2026-12-28 21:26:21",
+  "account_id": "AC-7226",
+  "action_type": "REPAYMENT",
+  "amount": "44104.33",
+  "user_id": "user11"
+ },
+ {
+  "transaction_id": "TX-000006",
+  "event_date": "2026-04-02T22:19:46+05:30",
+  "account_id": "AC-1390",
+  "action_type": "WITHDRAWAL",
+  "amount": "27275.96",
+  "user_id": "user12"
+ },
+ {
+  "transaction_id": "TX-000007",
+  "event_date": "2026-07-18 03:37:51",
+  "account_id": "AC-9417",
+  "action_type": "FEE_CHARGE",
+  "amount": "46968.00",
+  "user_id": "user12"
+ },
+ {
+  "transaction_id": "TX-000008",
+  "event_date": "23/06/2026 01:38:36",
+  "account_id": "AC-9607",
+  "action_type": "DISBURSEMENT",
+  "amount": "49786.17",
+  "user_id": "user23"
+ },
+ {
+  "transaction_id": "TX-000009",
+  "event_date": "30/11/2026 14:09:03",
+  "account_id": "AC-3640",
+  "action_type": "REPAYMENT",
+  "amount": "38706.59",
+  "user_id": "user34"
+ },
+ {
+  "transaction_id": "TX-000010",
+  "event_date": "19/04/2026 09:25:17",
+  "account_id": "AC-9205",
+  "action_type": "TRANSFER",
+  "amount": "29690.31",
+  "user_id": "user30"
+ },
+ {
+  "transaction_id": "TX-000011",
+  "event_date": "2026-06-29 00:56:41",
+  "account_id": "AC-8480",
+  "action_type": "REPAYMENT",
+  "amount": "18607.85",
+  "user_id": "user21"
+ },
+ {
+  "transaction_id": "TX-000012",
+  "event_date": "2026-11-21T12:30:36+05:30",
+  "account_id": "AC-5393",
+  "action_type": "REPAYMENT",
+  "amount": "25969.03",
+  "user_id": "user20"
+ },
+ {
+  "transaction_id": "TX-000013",
+  "event_date": "1790921934",
+  "account_id": "AC-9482",
+  "action_type": "TRANSFER",
+  "amount": "49321.37",
+  "user_id": "user27"
+ },
+ {
+  "transaction_id": "TX-000014",
+  "event_date": "22/03/2026 17:00:30",
+  "account_id": "AC-9386",
+  "action_type": "DISBURSEMENT",
+  "amount": "6323.94",
+  "user_id": "user22"
+ },
+ {
+  "transaction_id": "TX-000015",
+  "event_date": "2026-12-19T17:26:41+05:30",
+  "account_id": "AC-2739",
+  "action_type": "DEPOSIT",
+  "amount": "48186.41",
+  "user_id": "user04"
+ },
+ {
+  "transaction_id": "TX-000016",
+  "event_date": "2026-03-30T00:13:08.000Z",
+  "account_id": "AC-2741",
+  "action_type": "TRANSFER",
+  "amount": "11451.44",
+  "user_id": "user18"
+ },
+ {
+  "transaction_id": "TX-000017",
+  "event_date": "2026-03-23T17:48:21Z",
+  "account_id": "AC-7929",
+  "action_type": "FEE_CHARGE",
+  "amount": "2674.70",
+  "user_id": "user04"
+ },
+ {
+  "transaction_id": "TX-000018",
+  "event_date": "2026-03-08T23:32:49+05:30",
+  "account_id": "AC-1384",
+  "action_type": "DEPOSIT",
+  "amount": "9666.61",
+  "user_id": "user05"
+ },
+ {
+  "transaction_id": "",
+  "event_date": "2026-10-11T06:43:11Z",
+  "account_id": "AC-7112",
+  "action_type": "DISBURSEMENT",
+  "amount": "10720.56",
+  "user_id": "user11"
+ },
+ {
+  "transaction_id": "TX-000020",
+  "event_date": "2026-07-23T03:33:55.000Z",
+  "account_id": "AC-1031",
+  "action_type": "REPAYMENT",
+  "amount": "49448.34",
+  "user_id": "user03"
+ },
+ {
+  "transaction_id": "TX-000021",
+  "event_date": "2026-04-07T11:24:54+05:30",
+  "account_id": "AC-1594",
+  "action_type": "DEPOSIT",
+  "amount": "28874.67",
+  "user_id": "user08"
+ },
+ {
+  "transaction_id": "TX-000022",
+  "event_date": "2026-07-09T19:34:58Z",
+  "account_id": "AC-6052",
+  "action_type": "REPAYMENT",
+  "amount": "46264.45",
+  "user_id": "user39"
+ },
+ {
+  "transaction_id": "TX-000023",
+  "event_date": "2026-12-17 07:26:14",
+  "account_id": "AC-7583",
+  "action_type": "TRANSFER",
+  "amount": "12873.78",
+  "user_id": "user31"
+ },
+ {
+  "transaction_id": "TX-000024",
+  "event_date": "2026-02-06T07:03:04.000Z",
+  "account_id": "AC-6182",
+  "action_type": "DEPOSIT",
+  "amount": "2031.36",
+  "user_id": "user29"
+ },
+ {
+  "transaction_id": "TX-000025",
+  "event_date": "1771505013",
+  "account_id": "AC-7438",
+  "action_type": "REPAYMENT",
+  "amount": "43185.78",
+  "user_id": "user21"
+ },
+ {
+  "transaction_id": "TX-000026",
+  "event_date": "2026-05-13 10:49:33",
+  "account_id": "AC-5289",
+  "action_type": "TRANSFER",
+  "amount": "35212.64",
+  "user_id": "user02"
+ },
+ {
+  "transaction_id": "TX-000027",
+  "event_date": "2026-02-24T14:12:05.000Z",
+  "account_id": "AC-1930",
+  "action_type": "DISBURSEMENT",
+  "amount": "2815.90",
+  "user_id": "user09"
+ },
+ {
+  "transaction_id": "TX-000028",
+  "event_date": "07/02/2026 05:35:28",
+  "account_id": "AC-4795",
+  "action_type": "TRANSFER",
+  "amount": "2635.13",
+  "user_id": "user16"
+ },
+ {
+  "transaction_id": "TX-000029",
+  "event_date": "2026-06-22T16:52:50Z",
+  "account_id": "AC-5108",
+  "action_type": "DEPOSIT",
+  "amount": "49597.58",
+  "user_id": "user15"
+ },
+ {
+  "transaction_id": "TX-000030",
+  "event_date": "1794076106",
+  "account_id": "AC-6895",
+  "action_type": "DISBURSEMENT",
+  "amount": "35486.23",
+  "user_id": "user18"
+ },
+ {
+  "transaction_id": "TX-000031",
+  "event_date": "2026-01-03T02:28:12+05:30",
+  "account_id": "AC-1581",
+  "action_type": "REPAYMENT",
+  "amount": "34287.45",
+  "user_id": "user11"
+ },
+ {
+  "transaction_id": "TX-000032",
+  "event_date": "2026-10-09T02:01:20Z",
+  "account_id": "AC-4946",
+  "action_type": "DEPOSIT",
+  "amount": "8370.57",
+  "user_id": "user02"
+ },
+ {
+  "transaction_id": "TX-000033",
+  "event_date": "2026-03-31T21:58:24Z",
+  "account_id": "AC-4561",
+  "action_type": "DEPOSIT",
+  "amount": "43683.53",
+  "user_id": "user30"
+ },
+ {
+  "transaction_id": "TX-000034",
+  "event_date": "2026-07-27T23:31:57.000Z",
+  "account_id": "AC-7225",
+  "action_type": "WITHDRAWAL",
+  "amount": "17628.86",
+  "user_id": "user28"
+ },
+ {
+  "transaction_id": "TX-000035",
+  "event_date": "1767941068",
+  "account_id": "AC-1839",
+  "action_type": "REPAYMENT",
+  "amount": "44046.60",
+  "user_id": "user38"
+ },
+ {
+  "transaction_id": "TX-000036",
+  "event_date": "2026-02-06T10:09:22.000Z",
+  "account_id": "AC-8861",
+  "action_type": "DISBURSEMENT",
+  "amount": "1635.34",
+  "user_id": "user34"
+ },
+ {
+  "transaction_id": "TX-000037",
+  "event_date": "1771204852",
+  "account_id": "AC-7004",
+  "action_type": "DISBURSEMENT",
+  "amount": "31225.63",
+  "user_id": "user20"
+ },
+ {
+  "transaction_id": "TX-000027",
+  "event_date": "2026-02-24T14:12:05Z",
+  "account_id": "AC-1930",
+  "action_type": "DISBURSEMENT",
+  "amount": "2815.90",
+  "user_id": "user09"
+ },
+ {
+  "transaction_id": "TX-000038",
+  "event_date": "2026-03-19T01:08:29.000Z",
+  "account_id": "AC-1257",
+  "action_type": "REPAYMENT",
+  "amount": "5033.39",
+  "user_id": "user27"
+ },
+ {
+  "transaction_id": "TX-000039",
+  "event_date": "2026-06-30T04:08:24+05:30",
+  "account_id": "AC-2208",
+  "action_type": "DEPOSIT",
+  "amount": "23854.79",
+  "user_id": "user02"
+ },
+ {
+  "transaction_id": "TX-000040",
+  "event_date": "2026-12-30T05:21:08.000Z",
+  "account_id": "AC-2254",
+  "action_type": "WITHDRAWAL",
+  "amount": "41142.54",
+  "user_id": "user13"
+ },
+ {
+  "transaction_id": "TX-000041",
+  "event_date": "26/05/2026 00:17:20",
+  "account_id": "AC-8589",
+  "action_type": "WITHDRAWAL",
+  "amount": "28936.58",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000042",
+  "event_date": "2026-04-09T16:57:50Z",
+  "account_id": "AC-3014",
+  "action_type": "DEPOSIT",
+  "amount": "28059.48",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000043",
+  "event_date": "2026-09-26T23:59:22Z",
+  "account_id": "AC-1404",
+  "action_type": "TRANSFER",
+  "amount": "39458.87",
+  "user_id": "user03"
+ },
+ {
+  "transaction_id": "TX-000044",
+  "event_date": "2026-07-13 09:13:33",
+  "account_id": "AC-6858",
+  "action_type": "REPAYMENT",
+  "amount": "11868.06",
+  "user_id": "user24"
+ },
+ {
+  "transaction_id": "TX-000045",
+  "event_date": "24/07/2026 09:30:23",
+  "account_id": "AC-7864",
+  "action_type": "REPAYMENT",
+  "amount": "24895.34",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000046",
+  "event_date": "1783626653",
+  "account_id": "AC-5250",
+  "action_type": "TRANSFER",
+  "amount": "35875.20",
+  "user_id": "user06"
+ },
+ {
+  "transaction_id": "TX-000047",
+  "event_date": "1794668201",
+  "account_id": "AC-2572",
+  "action_type": "DEPOSIT",
+  "amount": "29869.24",
+  "user_id": "user12"
+ },
+ {
+  "transaction_id": "TX-000048",
+  "event_date": "26/02/2026 21:29:19",
+  "account_id": "AC-2095",
+  "action_type": "DEPOSIT",
+  "amount": "3152.75",
+  "user_id": "user09"
+ },
+ {
+  "transaction_id": "TX-000049",
+  "event_date": "2026-06-01T22:06:01+05:30",
+  "account_id": "AC-6397",
+  "action_type": "REPAYMENT",
+  "amount": "14473.91",
+  "user_id": "user34"
+ },
+ {
+  "transaction_id": "TX-000050",
+  "event_date": "1772460700",
+  "account_id": "AC-7942",
+  "action_type": "DEPOSIT",
+  "amount": "27586.40",
+  "user_id": "user34"
+ },
+ {
+  "transaction_id": "TX-000051",
+  "event_date": "2026-07-19 16:22:26",
+  "account_id": "AC-3778",
+  "action_type": "WITHDRAWAL",
+  "amount": "38667.53",
+  "user_id": "user16"
+ },
+ {
+  "transaction_id": "TX-000052",
+  "event_date": "1779256649",
+  "account_id": "AC-3371",
+  "action_type": "REPAYMENT",
+  "amount": "37010.13",
+  "user_id": "user02"
+ },
+ {
+  "transaction_id": "TX-000053",
+  "event_date": "2026-05-29T20:09:41.000Z",
+  "account_id": "AC-3956",
+  "action_type": "REPAYMENT",
+  "amount": "42797.28",
+  "user_id": "user04"
+ },
+ {
+  "transaction_id": "TX-000054",
+  "event_date": "2026-06-07 06:04:42",
+  "account_id": "AC-7752",
+  "action_type": "FEE_CHARGE",
+  "amount": "39637.10",
+  "user_id": "user24"
+ },
+ {
+  "transaction_id": "TX-000055",
+  "event_date": "2026-05-09T10:36:13.000Z",
+  "account_id": "AC-2333",
+  "action_type": "FEE_CHARGE",
+  "amount": "18875.27",
+  "user_id": "user35"
+ },
+ {
+  "transaction_id": "TX-000056",
+  "event_date": "2026-06-06T09:39:31.000Z",
+  "account_id": "AC-7267",
+  "action_type": "FEE_CHARGE",
+  "amount": "974.56",
+  "user_id": "user21"
+ },
+ {
+  "transaction_id": "TX-000057",
+  "event_date": "04/10/2026 08:22:24",
+  "account_id": "AC-3906",
+  "action_type": "DEPOSIT",
+  "amount": "1438.58",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000058",
+  "event_date": "1791702337",
+  "account_id": "AC-7320",
+  "action_type": "WITHDRAWAL",
+  "amount": "8427.97",
+  "user_id": "user25"
+ },
+ {
+  "transaction_id": "TX-000059",
+  "event_date": "2026-10-26T02:27:54+05:30",
+  "account_id": "AC-5495",
+  "action_type": "FEE_CHARGE",
+  "amount": "49177.32",
+  "user_id": "user38"
+ },
+ {
+  "transaction_id": "TX-000060",
+  "event_date": "1794209718",
+  "account_id": "AC-3258",
+  "action_type": "DEPOSIT",
+  "amount": "36440.94",
+  "user_id": "user31"
+ },
+ {
+  "transaction_id": "TX-000061",
+  "event_date": "2026-08-09T01:53:03+05:30",
+  "account_id": "AC-8652",
+  "action_type": "FEE_CHARGE",
+  "amount": "17197.43",
+  "user_id": "user05"
+ },
+ {
+  "transaction_id": "TX-000062",
+  "event_date": "18/12/2026 17:31:27",
+  "account_id": "AC-9735",
+  "action_type": "FEE_CHARGE",
+  "amount": "5490.89",
+  "user_id": "user38"
+ },
+ {
+  "transaction_id": "TX-000063",
+  "event_date": "2026-09-20 01:36:49",
+  "account_id": "AC-8525",
+  "action_type": "DISBURSEMENT",
+  "amount": "42187.36",
+  "user_id": "user30"
+ },
+ {
+  "transaction_id": "",
+  "event_date": "1769903531",
+  "account_id": "AC-6695",
+  "action_type": "WITHDRAWAL",
+  "amount": "33932.16",
+  "user_id": "user17"
+ },
+ {
+  "transaction_id": "TX-000065",
+  "event_date": "2026-11-02T19:18:27.000Z",
+  "account_id": "AC-3209",
+  "action_type": "DEPOSIT",
+  "amount": "13638.37",
+  "user_id": "user32"
+ },
+ {
+  "transaction_id": "TX-000066",
+  "event_date": "2026-06-30T10:54:51.000Z",
+  "account_id": "AC-5830",
+  "action_type": "WITHDRAWAL",
+  "amount": "873.43",
+  "user_id": "user19"
+ },
+ {
+  "transaction_id": "TX-000067",
+  "event_date": "2026-01-01 16:57:46",
+  "account_id": "AC-1557",
+  "action_type": "TRANSFER",
+  "amount": "32073.09",
+  "user_id": "user37"
+ },
+ {
+  "transaction_id": "TX-000068",
+  "event_date": "2026-12-05T01:35:21.000Z",
+  "account_id": "AC-6053",
+  "action_type": "REPAYMENT",
+  "amount": "11190.08",
+  "user_id": "user31"
+ },
+ {
+  "transaction_id": "TX-000069",
+  "event_date": "2026-10-04 04:00:05",
+  "account_id": "AC-2256",
+  "action_type": "DISBURSEMENT",
+  "amount": "26263.95",
+  "user_id": "user20"
+ },
+ {
+  "transaction_id": "TX-000070",
+  "event_date": "2026-11-06 01:46:32",
+  "account_id": "AC-7438",
+  "action_type": "TRANSFER",
+  "amount": "7798.11",
+  "user_id": "user33"
+ },
+ {
+  "transaction_id": "TX-000071",
+  "event_date": "1780349604",
+  "account_id": "AC-9691",
+  "action_type": "WITHDRAWAL",
+  "amount": "42335.81",
+  "user_id": "user06"
+ },
+ {
+  "transaction_id": "TX-000072",
+  "event_date": "01/04/2026 10:54:50",
+  "account_id": "AC-4802",
+  "action_type": "TRANSFER",
+  "amount": "23278.25",
+  "user_id": "user04"
+ },
+ {
+  "transaction_id": "TX-000073",
+  "event_date": "2026-02-13T11:35:57.000Z",
+  "account_id": "AC-7213",
+  "action_type": "DISBURSEMENT",
+  "amount": "17928.84",
+  "user_id": "user21"
+ },
+ {
+  "transaction_id": "TX-000074",
+  "event_date": "10/05/2026 23:45:21",
+  "account_id": "AC-6942",
+  "action_type": "WITHDRAWAL",
+  "amount": "41741.34",
+  "user_id": "user29"
+ },
+ {
+  "transaction_id": "TX-000075",
+  "event_date": "2026-06-29T06:54:19+05:30",
+  "account_id": "AC-8241",
+  "action_type": "FEE_CHARGE",
+  "amount": "18112.34",
+  "user_id": "user18"
+ },
+ {
+  "transaction_id": "TX-000076",
+  "event_date": "2026-02-08T21:24:50+05:30",
+  "account_id": "AC-8682",
+  "action_type": "WITHDRAWAL",
+  "amount": "31356.63",
+  "user_id": "user12"
+ },
+ {
+  "transaction_id": "TX-000077",
+  "event_date": "2026-11-06T00:20:49+05:30",
+  "account_id": "AC-4820",
+  "action_type": "DISBURSEMENT",
+  "amount": "46188.65",
+  "user_id": "user25"
+ },
+ {
+  "transaction_id": "TX-000078",
+  "event_date": "2026-11-16T19:45:16.000Z",
+  "account_id": "AC-6607",
+  "action_type": "DISBURSEMENT",
+  "amount": "49921.39",
+  "user_id": "user33"
+ },
+ {
+  "transaction_id": "TX-000079",
+  "event_date": "2026-10-12 07:48:38",
+  "account_id": "AC-7544",
+  "action_type": "FEE_CHARGE",
+  "amount": "24462.68",
+  "user_id": "user35"
+ },
+ {
+  "transaction_id": "TX-000080",
+  "event_date": "2026-09-18T10:59:06Z",
+  "account_id": "AC-7020",
+  "action_type": "DISBURSEMENT",
+  "amount": "33150.91",
+  "user_id": "user31"
+ },
+ {
+  "transaction_id": "TX-000081",
+  "event_date": "2026-12-17 01:02:35",
+  "account_id": "AC-8220",
+  "action_type": "REPAYMENT",
+  "amount": "7357.59",
+  "user_id": "user12"
+ },
+ {
+  "transaction_id": "TX-000082",
+  "event_date": "2026-05-28T10:10:02+05:30",
+  "account_id": "AC-1459",
+  "action_type": "DEPOSIT",
+  "amount": "29426.55",
+  "user_id": "user11"
+ },
+ {
+  "transaction_id": "TX-000083",
+  "event_date": "2026-12-23T09:03:53.000Z",
+  "account_id": "AC-8150",
+  "action_type": "DEPOSIT",
+  "amount": "45524.83",
+  "user_id": "user21"
+ },
+ {
+  "transaction_id": "TX-000084",
+  "event_date": "1795194215",
+  "account_id": "AC-7388",
+  "action_type": "TRANSFER",
+  "amount": "23879.45",
+  "user_id": "user31"
+ },
+ {
+  "transaction_id": "TX-000085",
+  "event_date": "2026-02-28 11:29:39",
+  "account_id": "AC-6183",
+  "action_type": "WITHDRAWAL",
+  "amount": "41814.13",
+  "user_id": "user07"
+ },
+ {
+  "transaction_id": "TX-000086",
+  "event_date": "2026-11-01T15:47:16+05:30",
+  "account_id": "AC-6428",
+  "action_type": "DISBURSEMENT",
+  "amount": "11859.76",
+  "user_id": "user27"
+ },
+ {
+  "transaction_id": "TX-000087",
+  "event_date": "2026-02-04 14:51:31",
+  "account_id": "AC-4072",
+  "action_type": "WITHDRAWAL",
+  "amount": "20141.07",
+  "user_id": "user03"
+ },
+ {
+  "transaction_id": "TX-000088",
+  "event_date": "2026-05-25T18:38:44.000Z",
+  "account_id": "AC-2010",
+  "action_type": "WITHDRAWAL",
+  "amount": "14888.53",
+  "user_id": "user05"
+ },
+ {
+  "transaction_id": "TX-000089",
+  "event_date": "2026-10-30 10:58:29",
+  "account_id": "AC-3175",
+  "action_type": "DISBURSEMENT",
+  "amount": "43872.58",
+  "user_id": "user37"
+ },
+ {
+  "transaction_id": "TX-000090",
+  "event_date": "2026-05-12T06:46:38.000Z",
+  "account_id": "AC-7464",
+  "action_type": "WITHDRAWAL",
+  "amount": "4542.66",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000091",
+  "event_date": "1783661939",
+  "account_id": "AC-6191",
+  "action_type": "TRANSFER",
+  "amount": "7596.67",
+  "user_id": "user38"
+ },
+ {
+  "transaction_id": "TX-000092",
+  "event_date": "16/09/2026 03:14:38",
+  "account_id": "AC-7574",
+  "action_type": "FEE_CHARGE",
+  "amount": "38133.61",
+  "user_id": "user11"
+ },
+ {
+  "transaction_id": "TX-000093",
+  "event_date": "23/07/2026 19:10:51",
+  "account_id": "AC-1756",
+  "action_type": "DEPOSIT",
+  "amount": "37861.41",
+  "user_id": "user38"
+ },
+ {
+  "transaction_id": "TX-000094",
+  "event_date": "2026-12-31T01:03:21.000Z",
+  "account_id": "AC-9192",
+  "action_type": "WITHDRAWAL",
+  "amount": "6488.45",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000095",
+  "event_date": "2026-11-06T21:13:32.000Z",
+  "account_id": "AC-1144",
+  "action_type": "DISBURSEMENT",
+  "amount": "8889.56",
+  "user_id": "user23"
+ },
+ {
+  "transaction_id": "TX-000096",
+  "event_date": "2026-01-10T21:57:31+05:30",
+  "account_id": "AC-8000",
+  "action_type": "FEE_CHARGE",
+  "amount": "7712.05",
+  "user_id": "user22"
+ },
+ {
+  "transaction_id": "TX-000097",
+  "event_date": "10/09/2026 04:29:14",
+  "account_id": "AC-1815",
+  "action_type": "REPAYMENT",
+  "amount": "20261.71",
+  "user_id": "user05"
+ },
+ {
+  "transaction_id": "TX-000098",
+  "event_date": "2026-08-06T00:04:55Z",
+  "account_id": "AC-3271",
+  "action_type": "FEE_CHARGE",
+  "amount": "42125.14",
+  "user_id": "user35"
+ },
+ {
+  "transaction_id": "TX-000099",
+  "event_date": "1773923300",
+  "account_id": "AC-1102",
+  "action_type": "TRANSFER",
+  "amount": "28319.82",
+  "user_id": "user34"
+ },
+ {
+  "transaction_id": "TX-000100",
+  "event_date": "2026-02-24 08:34:46",
+  "account_id": "AC-9062",
+  "action_type": "DEPOSIT",
+  "amount": "11054.12",
+  "user_id": "user35"
+ },
+ {
+  "transaction_id": "TX-000101",
+  "event_date": "12/02/2026 00:49:39",
+  "account_id": "AC-4469",
+  "action_type": "DEPOSIT",
+  "amount": "18054.71",
+  "user_id": "user25"
+ },
+ {
+  "transaction_id": "TX-000102",
+  "event_date": "09/09/2026 12:07:36",
+  "account_id": "AC-9593",
+  "action_type": "TRANSFER",
+  "amount": "13674.15",
+  "user_id": "user33"
+ },
+ {
+  "transaction_id": "TX-000103",
+  "event_date": "2026-11-14T20:01:51+05:30",
+  "account_id": "AC-4445",
+  "action_type": "WITHDRAWAL",
+  "amount": "31651.23",
+  "user_id": "user13"
+ },
+ {
+  "transaction_id": "TX-000104",
+  "event_date": "2026-06-17T13:26:14+05:30",
+  "account_id": "AC-8007",
+  "action_type": "WITHDRAWAL",
+  "amount": "33400.73",
+  "user_id": "user21"
+ },
+ {
+  "transaction_id": "TX-000105",
+  "event_date": "2026-11-12T03:46:24Z",
+  "account_id": "AC-2637",
+  "action_type": "REPAYMENT",
+  "amount": "22849.19",
+  "user_id": "user19"
+ },
+ {
+  "transaction_id": "TX-000106",
+  "event_date": "2026-07-09 21:04:28",
+  "account_id": "AC-4753",
+  "action_type": "REPAYMENT",
+  "amount": "11544.90",
+  "user_id": "user36"
+ },
+ {
+  "transaction_id": "TX-000107",
+  "event_date": "1768252872",
+  "account_id": "AC-4309",
+  "action_type": "WITHDRAWAL",
+  "amount": "16303.73",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000108",
+  "event_date": "2026-09-08T18:11:19+05:30",
+  "account_id": "AC-1385",
+  "action_type": "FEE_CHARGE",
+  "amount": "22021.99",
+  "user_id": "user31"
+ },
+ {
+  "transaction_id": "TX-000109",
+  "event_date": "2026-10-14T06:20:15+05:30",
+  "account_id": "AC-3366",
+  "action_type": "TRANSFER",
+  "amount": "26218.35",
+  "user_id": "user03"
+ },
+ {
+  "transaction_id": "TX-000110",
+  "event_date": "2026-02-12T07:20:11+05:30",
+  "account_id": "AC-9917",
+  "action_type": "WITHDRAWAL",
+  "amount": "7742.16",
+  "user_id": "user30"
+ },
+ {
+  "transaction_id": "TX-000111",
+  "event_date": "2026-03-23T08:16:16+05:30",
+  "account_id": "AC-6313",
+  "action_type": "FEE_CHARGE",
+  "amount": "23266.12",
+  "user_id": "user34"
+ },
+ {
+  "transaction_id": "TX-000112",
+  "event_date": "10/06/2026 06:31:08",
+  "account_id": "AC-1552",
+  "action_type": "REPAYMENT",
+  "amount": "24950.20",
+  "user_id": "user08"
+ },
+ {
+  "transaction_id": "TX-000113",
+  "event_date": "2026-10-13 03:52:19",
+  "account_id": "AC-1258",
+  "action_type": "WITHDRAWAL",
+  "amount": "35114.62",
+  "user_id": "user22"
+ },
+ {
+  "transaction_id": "TX-000114",
+  "event_date": "10/10/2026 16:27:13",
+  "account_id": "AC-9609",
+  "action_type": "FEE_CHARGE",
+  "amount": "16875.28",
+  "user_id": "user28"
+ },
+ {
+  "transaction_id": "TX-000115",
+  "event_date": "2026-09-27T11:30:27+05:30",
+  "account_id": "AC-8334",
+  "action_type": "REPAYMENT",
+  "amount": "29012.98",
+  "user_id": "user25"
+ },
+ {
+  "transaction_id": "TX-000116",
+  "event_date": "1775767850",
+  "account_id": "AC-4126",
+  "action_type": "TRANSFER",
+  "amount": "39939.63",
+  "user_id": "user29"
+ },
+ {
+  "transaction_id": "TX-000117",
+  "event_date": "1782974323",
+  "account_id": "AC-6533",
+  "action_type": "DISBURSEMENT",
+  "amount": "5937.31",
+  "user_id": "user11"
+ },
+ {
+  "transaction_id": "TX-000118",
+  "event_date": "01/09/2026 05:23:40",
+  "account_id": "AC-4641",
+  "action_type": "TRANSFER",
+  "amount": "48394.47",
+  "user_id": "user09"
+ },
+ {
+  "transaction_id": "TX-000119",
+  "event_date": "2026-04-30T18:35:50+05:30",
+  "account_id": "AC-9770",
+  "action_type": "DISBURSEMENT",
+  "amount": "8230.86",
+  "user_id": "user01"
+ },
+ {
+  "transaction_id": "TX-000120",
+  "event_date": "2026-01-12T12:14:59+05:30",
+  "account_id": "AC-6129",
+  "action_type": "DEPOSIT",
+  "amount": "26755.29",
+  "user_id": "user35"
+ },
+ {
+  "transaction_id": "TX-000121",
+  "event_date": "2026-10-09T05:30:19.000Z",
+  "account_id": "AC-6617",
+  "action_type": "REPAYMENT",
+  "amount": "6040.49",
+  "user_id": "user27"
+ },
+ {
+  "transaction_id": "TX-000122",
+  "event_date": "2026-10-04T09:23:01Z",
+  "account_id": "AC-5630",
+  "action_type": "TRANSFER",
+  "amount": "48171.13",
+  "user_id": "user09"
+ },
+ {
+  "transaction_id": "TX-000123",
+  "event_date": "1772670726",
+  "account_id": "AC-7155",
+  "action_type": "FEE_CHARGE",
+  "amount": "5441.17",
+  "user_id": "user38"
+ },
+ {
+  "transaction_id": "TX-000124",
+  "event_date": "2026-04-19T10:08:30.000Z",
+  "account_id": "AC-2347",
+  "action_type": "REPAYMENT",
+  "amount": "40165.77",
+  "user_id": "user16"
+ },
+ {
+  "transaction_id": "TX-000125",
+  "event_date": "2026-04-27T11:18:58+05:30",
+  "account_id": "AC-4324",
+  "action_type": "TRANSFER",
+  "amount": "28094.94",
+  "user_id": "user38"
+ },
+ {
+  "transaction_id": "TX-000126",
+  "event_date": "1780375650",
+  "account_id": "AC-7664",
+  "action_type": "WITHDRAWAL",
+  "amount": "17873.66",
+  "user_id": "user36"
+ },
+ {
+  "transaction_id": "TX-000127",
+  "event_date": "2026-09-16T17:44:10+05:30",
+  "account_id": "AC-3266",
+  "action_type": "TRANSFER",
+  "amount": "32820.45",
+  "user_id": "user28"
+ },
+ {
+  "transaction_id": "TX-000128",
+  "event_date": "27/06/2026 00:13:47",
+  "account_id": "AC-7471",
+  "action_type": "REPAYMENT",
+  "amount": "31871.68",
+  "user_id": "user19"
+ },
+ {
+  "transaction_id": "TX-000129",
+  "event_date": "2026-03-29T00:33:27Z",
+  "account_id": "AC-9726",
+  "action_type": "TRANSFER",
+  "amount": "7592.88",
+  "user_id": "user39"
+ },
+ {
+  "transaction_id": "TX-000130",
+  "event_date": "2026-09-19T22:59:40Z",
+  "account_id": "AC-1881",
+  "action_type": "REPAYMENT",
+  "amount": "36122.87",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000131",
+  "event_date": "2026-04-16T22:26:41Z",
+  "account_id": "AC-6971",
+  "action_type": "TRANSFER",
+  "amount": "30302.16",
+  "user_id": "user34"
+ },
+ {
+  "transaction_id": "TX-000132",
+  "event_date": "1783760041",
+  "account_id": "AC-2151",
+  "action_type": "FEE_CHARGE",
+  "amount": "38605.02",
+  "user_id": "user15"
+ },
+ {
+  "transaction_id": "TX-000133",
+  "event_date": "12/01/2026 09:46:01",
+  "account_id": "AC-1684",
+  "action_type": "WITHDRAWAL",
+  "amount": "11894.46",
+  "user_id": "user14"
+ },
+ {
+  "transaction_id": "TX-000134",
+  "event_date": "2026-07-28T19:40:21Z",
+  "account_id": "AC-3373",
+  "action_type": "FEE_CHARGE",
+  "amount": "24773.56",
+  "user_id": "user07"
+ },
+ {
+  "transaction_id": "TX-000135",
+  "event_date": "2026-07-30T01:18:44Z",
+  "account_id": "AC-3234",
+  "action_type": "REPAYMENT",
+  "amount": "11758.81",
+  "user_id": "user03"
+ },
+ {
+  "transaction_id": "TX-000136",
+  "event_date": "2026-09-14 12:32:48",
+  "account_id": "AC-8753",
+  "action_type": "DEPOSIT",
+  "amount": "46666.42",
+  "user_id": "user23"
+ },
+ {
+  "transaction_id": "TX-000137",
+  "event_date": "2026-09-24T13:04:28Z",
+  "account_id": "AC-6891",
+  "action_type": "DEPOSIT",
+  "amount": "29202.47",
+  "user_id": "user24"
+ },
+ {
+  "transaction_id": "TX-000138",
+  "event_date": "2026-09-04 22:44:07",
+  "account_id": "AC-8834",
+  "action_type": "DISBURSEMENT",
+  "amount": "42727.01",
+  "user_id": "user39"
+ },
+ {
+  "transaction_id": "TX-000139",
+  "event_date": "2026-01-10T22:24:04Z",
+  "account_id": "AC-6576",
+  "action_type": "REPAYMENT",
+  "amount": "690.38",
+  "user_id": "user23"
+ },
+ {
+  "transaction_id": "TX-000140",
+  "event_date": "2026-07-27T13:57:31.000Z",
+  "account_id": "AC-1830",
+  "action_type": "FEE_CHARGE",
+  "amount": "6437.44",
+  "user_id": "user35"
+ },
+ {
+  "transaction_id": "TX-000141",
+  "event_date": "27/10/2026 01:47:28",
+  "account_id": "AC-8022",
+  "action_type": "REPAYMENT",
+  "amount": "20122.63",
+  "user_id": "user12"
+ },
+ {
+  "transaction_id": "TX-000142",
+  "event_date": "2026-01-18T11:17:08Z",
+  "account_id": "AC-6784",
+  "action_type": "FEE_CHARGE",
+  "amount": "15218.42",
+  "user_id": "user19"
+ },
+ {
+  "transaction_id": "TX-000095",
+  "event_date": "2026-11-07T02:43:32+05:30",
+  "account_id": "AC-1144",
+  "action_type": "DISBURSEMENT",
+  "amount": "8889.56",
+  "user_id": "user23"
+ },
+ {
+  "transaction_id": "TX-000143",
+  "event_date": "2026-12-29T20:19:48+05:30",
+  "account_id": "AC-7600",
+  "action_type": "DEPOSIT",
+  "amount": "30213.32",
+  "user_id": "user08"
+ },
+ {
+  "transaction_id": "TX-000144",
+  "event_date": "2026-12-21T10:47:58Z",
+  "account_id": "AC-4975",
+  "action_type": "WITHDRAWAL",
+  "amount": "46151.48",
+  "user_id": "user13"
+ },
+ {
+  "transaction_id": "TX-000145",
+  "event_date": "26/09/2026 19:25:33",
+  "account_id": "AC-2310",
+  "action_type": "TRANSFER",
+  "amount": "23574.55",
+  "user_id": "user38"
+ },
+ {
+  "transaction_id": "TX-000146",
+  "event_date": "1768984816",
+  "account_id": "AC-9477",
+  "action_type": "TRANSFER",
+  "amount": "33819.05",
+  "user_id": "user28"
+ },
+ {
+  "transaction_id": "TX-000147",
+  "event_date": "2026-02-19T09:47:01+05:30",
+  "account_id": "AC-7994",
+  "action_type": "WITHDRAWAL",
+  "amount": "38572.32",
+  "user_id": "user24"
+ },
+ {
+  "transaction_id": "TX-000148",
+  "event_date": "2026-08-11T07:35:20+05:30",
+  "account_id": "AC-9460",
+  "action_type": "REPAYMENT",
+  "amount": "36698.47",
+  "user_id": "user39"
+ },
+ {
+  "transaction_id": "TX-000149",
+  "event_date": "2026-11-07T08:42:07.000Z",
+  "account_id": "AC-8306",
+  "action_type": "WITHDRAWAL",
+  "amount": "41574.95",
+  "user_id": "user39"
+ },
+ {
+  "transaction_id": "TX-000150",
+  "event_date": "2026-11-28 03:49:31",
+  "account_id": "AC-3386",
+  "action_type": "DEPOSIT",
+  "amount": "21082.65",
+  "user_id": "user12"
+ },
+ {
+  "transaction_id": "TX-000151",
+  "event_date": "05/09/2026 17:04:43",
+  "account_id": "AC-5102",
+  "action_type": "REPAYMENT",
+  "amount": "39430.30",
+  "user_id": "user30"
+ },
+ {
+  "transaction_id": "TX-000152",
+  "event_date": "2026-06-19 01:54:45",
+  "account_id": "AC-4594",
+  "action_type": "DISBURSEMENT",
+  "amount": "2635.88",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000153",
+  "event_date": "11/01/2026 20:06:03",
+  "account_id": "AC-5952",
+  "action_type": "DEPOSIT",
+  "amount": "45958.08",
+  "user_id": "user31"
+ },
+ {
+  "transaction_id": "TX-000154",
+  "event_date": "2026-09-24 13:29:01",
+  "account_id": "AC-5048",
+  "action_type": "REPAYMENT",
+  "amount": "38339.54",
+  "user_id": "user24"
+ },
+ {
+  "transaction_id": "TX-000155",
+  "event_date": "29/08/2026 06:18:28",
+  "account_id": "AC-5034",
+  "action_type": "TRANSFER",
+  "amount": "44854.17",
+  "user_id": "user11"
+ },
+ {
+  "transaction_id": "TX-000156",
+  "event_date": "2026-12-30 11:13:04",
+  "account_id": "AC-7878",
+  "action_type": "DEPOSIT",
+  "amount": "42395.07",
+  "user_id": "user16"
+ },
+ {
+  "transaction_id": "TX-000157",
+  "event_date": "2026-09-11T15:03:07.000Z",
+  "account_id": "AC-7337",
+  "action_type": "DEPOSIT",
+  "amount": "36294.69",
+  "user_id": "user39"
+ },
+ {
+  "transaction_id": "TX-000158",
+  "event_date": "22/07/2026 10:43:56",
+  "account_id": "AC-2477",
+  "action_type": "FEE_CHARGE",
+  "amount": "32763.75",
+  "user_id": "user29"
+ },
+ {
+  "transaction_id": "TX-000159",
+  "event_date": "2026-10-25T09:03:29.000Z",
+  "account_id": "AC-6943",
+  "action_type": "TRANSFER",
+  "amount": "29260.35",
+  "user_id": "user11"
+ },
+ {
+  "transaction_id": "TX-000160",
+  "event_date": "2026-09-16T02:14:18.000Z",
+  "account_id": "AC-3849",
+  "action_type": "REPAYMENT",
+  "amount": "37846.29",
+  "user_id": "user32"
+ },
+ {
+  "transaction_id": "TX-000161",
+  "event_date": "2026-10-08T15:24:40+05:30",
+  "account_id": "AC-7668",
+  "action_type": "DISBURSEMENT",
+  "amount": "26223.23",
+  "user_id": "user37"
+ },
+ {
+  "transaction_id": "TX-000162",
+  "event_date": "2026-04-27T04:39:36.000Z",
+  "account_id": "AC-5334",
+  "action_type": "FEE_CHARGE",
+  "amount": "26302.72",
+  "user_id": "user01"
+ },
+ {
+  "transaction_id": "TX-000163",
+  "event_date": "2026-01-16T20:52:43+05:30",
+  "account_id": "AC-8450",
+  "action_type": "DEPOSIT",
+  "amount": "9589.84",
+  "user_id": "user01"
+ },
+ {
+  "transaction_id": "TX-000164",
+  "event_date": "2026-05-21 18:17:10",
+  "account_id": "AC-6190",
+  "action_type": "FEE_CHARGE",
+  "amount": "34060.37",
+  "user_id": "user12"
+ },
+ {
+  "transaction_id": "TX-000165",
+  "event_date": "2026-12-26 03:57:22",
+  "account_id": "AC-2318",
+  "action_type": "TRANSFER",
+  "amount": "40283.65",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000166",
+  "event_date": "02/04/2026 09:41:03",
+  "account_id": "AC-2547",
+  "action_type": "TRANSFER",
+  "amount": "1547.87",
+  "user_id": "user23"
+ },
+ {
+  "transaction_id": "TX-000167",
+  "event_date": "31/02/2026",
+  "account_id": "AC-1839",
+  "action_type": "DEPOSIT",
+  "amount": "27668.46",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000168",
+  "event_date": "1797343407",
+  "account_id": "AC-1081",
+  "action_type": "REPAYMENT",
+  "amount": "48243.31",
+  "user_id": "user14"
+ },
+ {
+  "transaction_id": "TX-000169",
+  "event_date": "2026-08-26 18:45:09",
+  "account_id": "AC-3718",
+  "action_type": "DISBURSEMENT",
+  "amount": "25435.22",
+  "user_id": "user26"
+ },
+ {
+  "transaction_id": "TX-000170",
+  "event_date": "10/10/2026 00:41:40",
+  "account_id": "AC-8624",
+  "action_type": "DISBURSEMENT",
+  "amount": "7205.76",
+  "user_id": "user33"
+ },
+ {
+  "transaction_id": "TX-000171",
+  "event_date": "2026-05-23T17:57:33+05:30",
+  "account_id": "AC-6925",
+  "action_type": "DISBURSEMENT",
+  "amount": "15201.72",
+  "user_id": "user16"
+ },
+ {
+  "transaction_id": "TX-000172",
+  "event_date": "2026-09-09T23:30:41.000Z",
+  "account_id": "AC-4685",
+  "action_type": "WITHDRAWAL",
+  "amount": "49155.51",
+  "user_id": "user30"
+ },
+ {
+  "transaction_id": "TX-000173",
+  "event_date": "2026-12-02 02:08:57",
+  "account_id": "AC-4334",
+  "action_type": "TRANSFER",
+  "amount": "13559.48",
+  "user_id": "user01"
+ },
+ {
+  "transaction_id": "TX-000174",
+  "event_date": "2026-07-03T16:12:05.000Z",
+  "account_id": "AC-6927",
+  "action_type": "FEE_CHARGE",
+  "amount": "15090.57",
+  "user_id": "user13"
+ },
+ {
+  "transaction_id": "TX-000175",
+  "event_date": "2026-08-25T00:39:01+05:30",
+  "account_id": "AC-8937",
+  "action_type": "TRANSFER",
+  "amount": "557.44",
+  "user_id": "user09"
+ },
+ {
+  "transaction_id": "TX-000176",
+  "event_date": "2026-10-01T12:46:07+05:30",
+  "account_id": "AC-1023",
+  "action_type": "TRANSFER",
+  "amount": "7040.79",
+  "user_id": "user30"
+ },
+ {
+  "transaction_id": "TX-000177",
+  "event_date": "2026-03-18T11:31:31.000Z",
+  "account_id": "AC-4029",
+  "action_type": "DISBURSEMENT",
+  "amount": "33173.44",
+  "user_id": "user02"
+ },
+ {
+  "transaction_id": "TX-000136",
+  "event_date": "2026-09-14 12:32:48",
+  "account_id": "AC-8753",
+  "action_type": "DEPOSIT",
+  "amount": "46666.42",
+  "user_id": "user23"
+ },
+ {
+  "transaction_id": "TX-000178",
+  "event_date": "22/05/2026 18:28:54",
+  "account_id": "AC-7233",
+  "action_type": "DEPOSIT",
+  "amount": "12.3.4",
+  "user_id": "user30"
+ },
+ {
+  "transaction_id": "TX-000179",
+  "event_date": "09/11/2026 14:34:46",
+  "account_id": "AC-2030",
+  "action_type": "DISBURSEMENT",
+  "amount": "12398.15",
+  "user_id": "user31"
+ },
+ {
+  "transaction_id": "TX-000180",
+  "event_date": "1797821912",
+  "account_id": "AC-5789",
+  "action_type": "DISBURSEMENT",
+  "amount": "2284.19",
+  "user_id": "user36"
+ },
+ {
+  "transaction_id": "TX-000181",
+  "event_date": "2026-03-22T22:24:41Z",
+  "account_id": "AC-7832",
+  "action_type": "WITHDRAWAL",
+  "amount": "15631.99",
+  "user_id": "user38"
+ },
+ {
+  "transaction_id": "TX-000182",
+  "event_date": "2026-12-26T11:56:55+05:30",
+  "account_id": "AC-1641",
+  "action_type": "FEE_CHARGE",
+  "amount": "28328.31",
+  "user_id": "user30"
+ },
+ {
+  "transaction_id": "TX-000183",
+  "event_date": "2026-03-02T00:32:54+05:30",
+  "account_id": "AC-6749",
+  "action_type": "FEE_CHARGE",
+  "amount": "25727.07",
+  "user_id": "user07"
+ },
+ {
+  "transaction_id": "TX-000184",
+  "event_date": "2026-03-02T13:45:56+05:30",
+  "account_id": "AC-1472",
+  "action_type": "DISBURSEMENT",
+  "amount": "9981.65",
+  "user_id": "user18"
+ },
+ {
+  "transaction_id": "TX-000185",
+  "event_date": "2026-10-28T23:45:41Z",
+  "account_id": "AC-9267",
+  "action_type": "FEE_CHARGE",
+  "amount": "11382.57",
+  "user_id": "user23"
+ },
+ {
+  "transaction_id": "TX-000186",
+  "event_date": "2026-06-14T13:12:51.000Z",
+  "account_id": "AC-4211",
+  "action_type": "DISBURSEMENT",
+  "amount": "46401.50",
+  "user_id": "user02"
+ },
+ {
+  "transaction_id": "TX-000187",
+  "event_date": "2026-05-13T05:21:02.000Z",
+  "account_id": "AC-3451",
+  "action_type": "FEE_CHARGE",
+  "amount": "6176.46",
+  "user_id": "user35"
+ },
+ {
+  "transaction_id": "TX-000188",
+  "event_date": "2026-02-23T03:55:13.000Z",
+  "account_id": "AC-9081",
+  "action_type": "REPAYMENT",
+  "amount": "30035.03",
+  "user_id": "user31"
+ },
+ {
+  "transaction_id": "TX-000189",
+  "event_date": "2026-04-26T08:50:03Z",
+  "account_id": "AC-3465",
+  "action_type": "FEE_CHARGE",
+  "amount": "9636.84",
+  "user_id": "user01"
+ },
+ {
+  "transaction_id": "TX-000190",
+  "event_date": "2026-12-15T20:59:31+05:30",
+  "account_id": "AC-6771",
+  "action_type": "FEE_CHARGE",
+  "amount": "13067.81",
+  "user_id": "user20"
+ },
+ {
+  "transaction_id": "TX-000191",
+  "event_date": "1789988308",
+  "account_id": "AC-3114",
+  "action_type": "DEPOSIT",
+  "amount": "19185.59",
+  "user_id": "user37"
+ },
+ {
+  "transaction_id": "TX-000192",
+  "event_date": "2026-10-17T18:42:56+05:30",
+  "account_id": "AC-6485",
+  "action_type": "DEPOSIT",
+  "amount": "15666.92",
+  "user_id": "user28"
+ },
+ {
+  "transaction_id": "TX-000193",
+  "event_date": "2026-09-10T05:32:59.000Z",
+  "account_id": "AC-1613",
+  "action_type": "DISBURSEMENT",
+  "amount": "36004.65",
+  "user_id": "user32"
+ },
+ {
+  "transaction_id": "TX-000194",
+  "event_date": "2026-05-15T03:38:11+05:30",
+  "account_id": "AC-9634",
+  "action_type": "DEPOSIT",
+  "amount": "3605.08",
+  "user_id": "user09"
+ },
+ {
+  "transaction_id": "TX-000195",
+  "event_date": "2026-05-28T00:21:01+05:30",
+  "account_id": "AC-7898",
+  "action_type": "FEE_CHARGE",
+  "amount": "18719.52",
+  "user_id": "user18"
+ },
+ {
+  "transaction_id": "TX-000196",
+  "event_date": "2026-09-30T07:27:48Z",
+  "account_id": "AC-2410",
+  "action_type": "TRANSFER",
+  "amount": "47851.48",
+  "user_id": "user12"
+ },
+ {
+  "transaction_id": "TX-000197",
+  "event_date": "2026-08-30T05:22:22.000Z",
+  "account_id": "AC-2184",
+  "action_type": "TRANSFER",
+  "amount": "26314.46",
+  "user_id": "user09"
+ }
+]
