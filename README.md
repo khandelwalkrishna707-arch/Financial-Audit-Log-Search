@@ -18,7 +18,7 @@ standard library.
 | Import CSV / JSON / JSON Lines, validation, date + amount normalization | ✅ done |
 | SQLite storage, indexes, 1,000-row batches, duplicate policy (skip / update) | ✅ done |
 | Tests (unit, integration, end-to-end), CI with 85% coverage gate | ✅ done |
-| Search by transaction ID (exact / prefix) and date range | 🚧 week 2 |
+| Search by transaction ID (exact / prefix) and date range | ✅ done (#2) |
 | Terminal table + CSV export, interactive menu, benchmark script | 🚧 week 2 |
 | Flask dashboard on localhost (stretch goal) | ⏳ later |
 
@@ -57,10 +57,17 @@ Rejected rows (first 17):
 
 ```bash
 audit-search import --file <path> [--on-duplicate skip|update] [--db audit.db]
-audit-search find   --id TX-98721 [--prefix] [--export out.csv]     # week 2
-audit-search range  --from 2026-01-01 --to 2026-03-31 [--export q1.csv]  # week 2
-audit-search menu                                                     # week 2
+audit-search find   --id TX-98721 [--prefix]
+audit-search range  --from 2026-01-01 --to 2026-03-31
+audit-search menu                                       # week 2
+# --export out.csv on find / range                      # week 2
 ```
+
+* `find --prefix` matches IDs that start with the text; `%` and `_` are ordinary characters.
+* `range` includes **both** days completely: `--to 2026-03-31` includes events up to
+  `2026-03-31T23:59:59Z`. Search dates accept the same formats as imported dates.
+* Results are sorted by event date, then transaction ID. On 10,000 records an ID lookup takes
+  well under 1 ms and a one-month range about 2 ms (target: under 50 ms).
 
 `python -m audit_search ...` works too. The database defaults to `audit.db` in the current folder
 (override with `--db` or the `AUDIT_SEARCH_DB` environment variable).

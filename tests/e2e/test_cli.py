@@ -55,9 +55,14 @@ def test_invalid_duplicate_policy_is_refused(fixtures_dir):
 
 
 @pytest.mark.parametrize(
-    "command", [["find", "--id", "TX-1"], ["range", "--from", "a", "--to", "b"], ["menu"]]
+    "command",
+    [
+        ["menu"],
+        ["find", "--id", "TX-1", "--export", "out.csv"],
+        ["range", "--from", "2026-01-01", "--to", "2026-01-31", "--export", "out.csv"],
+    ],
 )
-def test_search_commands_are_not_built_yet(command, capsys):
+def test_unbuilt_features_say_so(command, capsys):
     assert main(command) == 2
     assert "not built yet" in capsys.readouterr().err
 
