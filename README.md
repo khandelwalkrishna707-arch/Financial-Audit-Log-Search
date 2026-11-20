@@ -26,6 +26,17 @@ standard library.
 
 File formats (input columns, rejected rows, export layout): [docs/file_formats.md](docs/file_formats.md).
 
+## Run it in one command
+
+```bash
+./run.sh            # macOS / Linux: sets up on first run, loads sample data, opens the dashboard
+```
+
+The dashboard opens at http://127.0.0.1:5000. You can import your own CSV / JSON / JSONL files
+from the page, search by transaction ID or date range, filter, and export to CSV. It only
+listens on 127.0.0.1, so nothing is reachable from other machines. Use `./run.sh 8080` if port
+5000 is busy (on macOS, AirPlay Receiver sometimes uses it).
+
 ## Quick start
 
 Requires Python 3.10 or newer.

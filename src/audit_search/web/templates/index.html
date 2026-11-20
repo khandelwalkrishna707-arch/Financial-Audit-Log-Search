@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Audit Log Search</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%233557e0'/%3E%3Ccircle cx='11' cy='11' r='5' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='m18 18-3-3' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
 <style>
   :root {
     --bg:#f4f6fa; --fg:#14213d; --muted:#5f6b85; --card:#ffffff; --line:#e3e8f1; --soft:#f0f3f9;
@@ -87,6 +88,20 @@
   .b-FEE_CHARGE { background:var(--red-bg); color:var(--red); }
   .empty { text-align:center; padding:48px 16px; color:var(--muted); }
   .empty .big { font-size:17px; color:var(--fg); font-weight:600; margin-bottom:4px; }
+  .import { padding:16px 18px; margin-bottom:16px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+  .import .title { font-weight:600; margin-right:auto; }
+  .import .title small { display:block; font-weight:400; color:var(--muted); font-size:13px; }
+  .drop { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .drop input[type=file] { font:inherit; font-size:13px; color:var(--muted); max-width:260px; }
+  .drop input[type=file]::file-selector-button { font:inherit; font-size:13px; padding:7px 12px; margin-right:8px; border-radius:8px; border:1px dashed var(--accent); background:var(--soft); color:var(--accent); cursor:pointer; }
+  button.ghost { background:transparent; color:var(--fg); border-color:var(--line); }
+  .notice { border-radius:12px; padding:14px 16px; margin:0 0 16px; background:var(--green-bg); color:var(--fg); }
+  .notice h3 { margin:0 0 6px; font-size:15px; color:var(--green); }
+  .notice table { font-size:13.5px; width:auto; }
+  .notice th, .notice td { padding:4px 14px 4px 0; border:0; background:transparent !important; position:static; }
+  .notice details { margin-top:6px; font-size:13px; color:var(--muted); }
+  .notice .bad { color:var(--red); font-weight:600; }
+  .notice .ok { color:var(--green); font-weight:600; }
   footer { text-align:center; color:var(--muted); font-size:12.5px; margin-top:28px; }
 </style>
 </head>
@@ -121,6 +136,40 @@
       <div class="value">{{ "{:,}".format(total) if results is not none and not error else "–" }}</div>
       <div class="hint">{% if results is not none and not error %}matching event{{ '' if total == 1 else 's' }}{% else %}no search yet{% endif %}</div></div>
   </section>
+
+  <section class="card import" aria-label="Import data">
+    <div class="title">Import audit logs<small>CSV, JSON or JSON Lines. Files are processed on this computer only.</small></div>
+    <form class="drop" method="post" action="/import" enctype="multipart/form-data">
+      <input type="file" name="files" accept=".csv,.json,.jsonl,.ndjson" multiple required>
+      <button type="submit">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V9m0 0-4 4m4-4 4 4M5 4h14"/></svg>
+        Import</button>
+    </form>
+    {% if has_samples %}
+    <form method="post" action="/import-samples"><button class="ghost" type="submit">Load sample data</button></form>
+    {% endif %}
+  </section>
+
+  {% if import_error %}<div class="error" role="alert">⚠ {{ import_error }}</div>{% endif %}
+  {% if imports %}
+  <section class="notice" role="status">
+    <h3>✓ Import finished</h3>
+    <table>
+      <thead><tr><th>File</th><th>Rows read</th><th>Inserted</th><th>Duplicates</th><th>Rejected</th></tr></thead>
+      <tbody>
+      {% for s in imports %}
+        <tr><td><strong>{{ s.source_file }}</strong></td><td>{{ s.read }}</td><td class="ok">{{ s.inserted }}</td>
+            <td>{{ s.duplicates }}</td><td class="{{ 'bad' if s.rejected else '' }}">{{ s.rejected }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% for s in imports if s.rejections %}
+    <details><summary>Why {{ s.rejected }} row{{ '' if s.rejected == 1 else 's' }} in {{ s.source_file }} {{ 'was' if s.rejected == 1 else 'were' }} rejected</summary>
+      <ul>{% for r in s.rejections[:50] %}<li>{{ r.location }}: {{ r.reason }}</li>{% endfor %}</ul>
+    </details>
+    {% endfor %}
+  </section>
+  {% endif %}
 
   <form class="card search" method="get" action="/">
     <fieldset>
@@ -208,7 +257,7 @@
     {% endif %}
   </section>
   {% elif not error %}
-  <div class="card empty" style="margin-top:16px"><div class="big">Start a search</div>Enter a transaction ID or a date range above.</div>
+  <div class="card empty" style="margin-top:16px"><div class="big">{% if overview and overview.events %}Start a search{% else %}No data yet{% endif %}</div>{% if overview and overview.events %}Enter a transaction ID or a date range above.{% else %}Import a file above{% if has_samples %}, or click <strong>Load sample data</strong>{% endif %} to get started.{% endif %}</div>
   {% endif %}
 
   <footer>Your data never leaves this computer. Amounts are stored in exact cents; dates in ISO 8601 UTC.</footer>

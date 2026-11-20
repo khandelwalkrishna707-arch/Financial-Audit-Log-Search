@@ -71,9 +71,14 @@ def test_missing_database(tmp_path):
 
 def test_web_command_runs_on_localhost(tmp_path, monkeypatch, capsys):
     seen = {}
+    opened = []
     monkeypatch.setattr("flask.Flask.run", lambda self, **kw: seen.update(kw))
-    assert cli.main(["web", "--db", str(tmp_path / "a.db"), "--port", "5055"]) == 0
+    monkeypatch.setattr("webbrowser.open", opened.append)
+    monkeypatch.setattr("threading.Timer", lambda delay, fn, args: type(
+        "T", (), {"start": lambda self: fn(*args)})())
+    assert cli.main(["web", "--db", str(tmp_path / "a.db"), "--port", "5055", "--open"]) == 0
     assert seen == {"host": "127.0.0.1", "port": 5055, "debug": False}
+    assert opened == ["http://127.0.0.1:5055"]
     assert "http://127.0.0.1:5055" in capsys.readouterr().out
 
 
@@ -100,3 +105,55 @@ def test_money_display():
     assert money(123456789) == "1,234,567.89"
     assert money(-5) == "-0.05"
     assert money(None) == ""
+
+
+def test_upload_import(tmp_path, fixtures_dir):
+    db = tmp_path / "fresh.db"
+    client = create_app(str(db), samples_dir=None).test_client()
+    assert "No data yet" in client.get("/").get_data(as_text=True)
+    with (fixtures_dir / "corrupted.csv").open("rb") as one, \
+            (fixtures_dir / "valid.json").open("rb") as two:
+        page = client.post("/import", data={"files": [(one, "corrupted.csv"),
+                                                      (two, "valid.json")]},
+                           content_type="multipart/form-data").get_data(as_text=True)
+    assert "Import finished" in page and "corrupted.csv" in page and "valid.json" in page
+    assert "line 3: missing transaction_id" in page
+    assert "Load sample data" not in page
+    page = client.get("/?transaction_id=TX-2001").get_data(as_text=True)
+    assert "1 event<" in page
+
+
+def test_upload_errors(tmp_path):
+    client = create_app(str(tmp_path / "a.db"), samples_dir=None).test_client()
+    assert client.post("/import", data={}).status_code == 400
+    response = client.post("/import", data={"files": (io.BytesIO(b"x"), "log.xml")},
+                           content_type="multipart/form-data")
+    assert response.status_code == 400 and "unsupported file type" in response.get_data(True)
+    page = client.post("/import", data={"files": (io.BytesIO("a,b\n\xe9".encode("latin-1")),
+                                                  "bad.csv")},
+                       content_type="multipart/form-data").get_data(as_text=True)
+    assert "not UTF-8" in page
+    page = client.post("/import", data={"files": (io.BytesIO(b"[{"), "broken.json")},
+                       content_type="multipart/form-data").get_data(as_text=True)
+    assert "broken.json:" in page
+    assert client.post("/import-samples").status_code == 404
+
+
+def test_load_sample_data(tmp_path, fixtures_dir):
+    samples = tmp_path / "samples"
+    samples.mkdir()
+    (samples / "valid.csv").write_bytes((fixtures_dir / "valid.csv").read_bytes())
+    (samples / "notes.txt").write_text("ignored")
+    client = create_app(str(tmp_path / "a.db"), samples_dir=samples).test_client()
+    assert "Load sample data" in client.get("/").get_data(as_text=True)
+    page = client.post("/import-samples").get_data(as_text=True)
+    assert "Import finished" in page and "notes.txt" not in page
+    assert "Records indexed" in page and ">4<" in page
+
+
+def test_other_websites_cannot_post(tmp_path):
+    client = create_app(str(tmp_path / "a.db"), samples_dir=None).test_client()
+    assert client.post("/import-samples", headers={"Origin": "https://evil.example"}
+                       ).status_code == 403
+    assert client.post("/import-samples", headers={"Origin": "http://localhost"}
+                       ).status_code == 404  # same host passes the guard

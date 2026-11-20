@@ -83,6 +83,7 @@ def build_parser() -> argparse.ArgumentParser:
         "web", parents=[common], help="local web dashboard on 127.0.0.1 (needs Flask)"
     )
     p_web.add_argument("--port", type=int, default=5000, help="port (default: %(default)s)")
+    p_web.add_argument("--open", action="store_true", help="open the dashboard in your browser")
     p_web.set_defaults(handler=cmd_web)
 
     return parser
@@ -196,7 +197,14 @@ def cmd_web(args: argparse.Namespace) -> int:
     from audit_search.web import HOST
 
     app = create_app(args.db)
-    print(f"Audit search dashboard on http://{HOST}:{args.port} (Ctrl+C to stop)")
+    url = f"http://{HOST}:{args.port}"
+    print(paint(f"Audit Log Search dashboard: {url}", "bold", "green", enabled=use_color()))
+    print("Press Ctrl+C to stop.")
+    if args.open:
+        import threading
+        import webbrowser
+
+        threading.Timer(1.0, webbrowser.open, args=(url,)).start()
     app.run(host=HOST, port=args.port, debug=False)
     return 0
 

@@ -8,13 +8,18 @@ from __future__ import annotations
 
 import io
 import sqlite3
+import tempfile
 from collections import Counter
 from contextlib import closing
 from pathlib import Path
+from urllib.parse import urlsplit
 
-from flask import Flask, Response, render_template, request
+from flask import Flask, Response, abort, render_template, request
+from werkzeug.utils import secure_filename
 
 from audit_search.export.csv_writer import write_rows
+from audit_search.importer import import_file
+from audit_search.ingest import SUPPORTED_EXTENSIONS
 from audit_search.normalize.fields import cents_to_str
 from audit_search.search.filters import Filters
 from audit_search.search.service import search
@@ -26,9 +31,28 @@ _FIELDS = ("transaction_id", "start", "end", "account", "user", "action",
            "min_amount", "max_amount")
 
 
-def create_app(db_path: str) -> Flask:
+# Synthetic sample files shipped in the repository (present in a source checkout only).
+SAMPLES_DIR = Path(__file__).resolve().parents[3] / "data" / "samples"
+MAX_UPLOAD_BYTES = 200 * 1024 * 1024
+
+
+def create_app(db_path: str, samples_dir: Path | None = SAMPLES_DIR) -> Flask:
     app = Flask(__name__)
     app.config["DB_PATH"] = db_path
+    app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_BYTES
+
+    def sample_files() -> list[Path]:
+        if samples_dir is None or not samples_dir.is_dir():
+            return []
+        return sorted(p for p in samples_dir.iterdir() if p.suffix.lower() in SUPPORTED_EXTENSIONS)
+
+    @app.before_request
+    def same_origin_posts_only():
+        """Block other websites from posting to this local server (a simple CSRF guard)."""
+        if request.method == "POST":
+            origin = request.headers.get("Origin")
+            if origin and urlsplit(origin).netloc != request.host:
+                abort(403)
 
     def run_query(form):
         filters = Filters.from_text(form.get("account"), form.get("user"), form.get("action"),
@@ -54,16 +78,8 @@ def create_app(db_path: str) -> Flask:
         except sqlite3.Error:
             return None
 
-    @app.get("/")
-    def index():
-        form = {name: request.args.get(name, "").strip() for name in _FIELDS}
-        form["prefix"] = request.args.get("prefix", "")
-        results, error = None, None
-        if any(form[name] for name in _FIELDS):
-            try:
-                results = run_query(form)
-            except (ValueError, sqlite3.Error) as exc:
-                error = str(exc)
+    def render(form=None, results=None, error=None, imports=None, import_error=None):
+        form = form or {name: "" for name in (*_FIELDS, "prefix")}
         summary = _summarize(results) if results else None
         return render_template(
             "index.html",
@@ -74,9 +90,64 @@ def create_app(db_path: str) -> Flask:
             total=len(results) if results is not None else 0,
             max_rows=MAX_ROWS_SHOWN,
             error=error,
+            imports=imports,
+            import_error=import_error,
+            has_samples=bool(sample_files()),
             query_string=request.query_string.decode(),
             money=money,
         )
+
+    @app.get("/")
+    def index():
+        form = {name: request.args.get(name, "").strip() for name in _FIELDS}
+        form["prefix"] = request.args.get("prefix", "")
+        results, error = None, None
+        if any(form[name] for name in _FIELDS):
+            try:
+                results = run_query(form)
+            except (ValueError, sqlite3.Error) as exc:
+                error = str(exc)
+        return render(form, results, error)
+
+    def run_imports(paths: list[tuple[Path, str]]):
+        summaries, problem = [], None
+        with closing(connect(app.config["DB_PATH"])) as conn:
+            for path, shown_name in paths:
+                try:
+                    summary = import_file(conn, path)
+                    summary.source_file = shown_name
+                    summaries.append(summary)
+                except UnicodeDecodeError:
+                    problem = f"{shown_name} is not UTF-8 text. Re-save it as UTF-8 and try again."
+                except (OSError, ValueError, sqlite3.Error) as exc:
+                    problem = f"{shown_name}: {exc}"
+        return summaries, problem
+
+    @app.post("/import")
+    def upload():
+        uploaded = [f for f in request.files.getlist("files") if f and f.filename]
+        if not uploaded:
+            return render(import_error="Choose at least one CSV, JSON or JSONL file."), 400
+        with tempfile.TemporaryDirectory(prefix="audit-search-") as tmp:
+            paths = []
+            for item in uploaded:
+                name = secure_filename(item.filename) or "upload"
+                if Path(name).suffix.lower() not in SUPPORTED_EXTENSIONS:
+                    return render(import_error=f"{item.filename}: unsupported file type. "
+                                  "Use .csv, .json, .jsonl or .ndjson."), 400
+                target = Path(tmp) / name
+                item.save(target)
+                paths.append((target, name))
+            summaries, problem = run_imports(paths)
+        return render(imports=summaries, import_error=problem)
+
+    @app.post("/import-samples")
+    def import_samples():
+        files = sample_files()
+        if not files:
+            return render(import_error="No sample files found."), 404
+        summaries, problem = run_imports([(p, p.name) for p in files])
+        return render(imports=summaries, import_error=problem)
 
     @app.get("/export.csv")
     def export_csv():
