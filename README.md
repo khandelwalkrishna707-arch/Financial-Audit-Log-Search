@@ -19,7 +19,8 @@ standard library.
 | SQLite storage, indexes, 1,000-row batches, duplicate policy (skip / update) | ✅ done |
 | Tests (unit, integration, end-to-end), CI with 85% coverage gate | ✅ done |
 | Search by transaction ID (exact / prefix) and date range | ✅ done (#2) |
-| Terminal table + CSV export, interactive menu, benchmark script | 🚧 week 2 |
+| Benchmark script, privacy guide, contributing guide | ✅ done |
+| Terminal table + CSV export, interactive menu | 🚧 week 2 |
 | Flask dashboard on localhost (stretch goal) | ⏳ later |
 
 See [docs/remaining_work.md](docs/remaining_work.md) for the week 2 plan.
@@ -92,9 +93,20 @@ audit-search menu                                       # week 2
 pytest --cov          # all tests + coverage report (fails below 85%)
 ruff check .          # lint
 python scripts/generate_synthetic_data.py --rows 10000   # fake data in data/generated/
+python scripts/benchmark.py                              # check the performance targets
 ```
 
+Benchmark on an Apple Silicon Mac (10,000 records, 100 runs per query):
+
+| Measurement | Result | PRD target |
+|---|---|---|
+| Import 10,000 rows | 0.13 s | < 3.0 s |
+| Exact ID lookup (max) | 0.04 ms | < 50 ms |
+| Prefix lookup (max) | 0.3 ms | < 50 ms |
+| One-month range, ~700–800 rows (max) | 2.1 ms | < 50 ms |
+
+How to contribute: [CONTRIBUTING.md](CONTRIBUTING.md).
 Only synthetic data is committed (`data/samples/`). Never commit real audit logs or `.db` files;
-`.gitignore` blocks them.
+`.gitignore` blocks them. See [docs/data_privacy.md](docs/data_privacy.md).
 
 More detail: [docs/PROJECT_EXPLANATION.md](docs/PROJECT_EXPLANATION.md).
