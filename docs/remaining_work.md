@@ -94,7 +94,7 @@ Read the docstrings in each file. Key points:
 See the docstring. Make it testable: have `run_menu` take `input_func=input` and
 `print_func=print` parameters. Tests can then pass fake functions instead of typing.
 
-## 5. `scripts/benchmark.py`: prove the targets
+## 5. `scripts/benchmark.py`: prove the targets ✅ done
 
 1. Generate 10,000 rows with `generate_synthetic_data.make_rows`.
 2. Time `import_file` (target < 3.0 s; currently about 0.15 s).
@@ -105,9 +105,9 @@ Put the numbers in the README.
 
 ## 6. Docs and repo hygiene
 
-- `docs/data_privacy.md`: data stays local, real logs never go in Git, delete `audit.db` when
+- ✅ `docs/data_privacy.md`: data stays local, real logs never go in Git, delete `audit.db` when
   done, the web UI only binds to 127.0.0.1.
-- `CONTRIBUTING.md`: setup, branch naming, commit style (`feat(search): ...`), "tests + ruff
+- ✅ `CONTRIBUTING.md`: setup, branch naming, commit style (`feat(search): ...`), "tests + ruff
   must pass".
 - `LICENSE`: choose one with your mentor (MIT and Apache-2.0 are common; Fineract uses Apache-2.0).
 - README: change the 🚧 rows to ✅ and add search examples.
