@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audit Log Search</title>
+<style>
+  :root { --bg:#f7f7f5; --fg:#1d1d1b; --muted:#6b6b66; --card:#fff; --line:#e2e2dc; --accent:#2457c5; --err:#b3261e; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#151514; --fg:#ececea; --muted:#9a9a94; --card:#1f1f1d; --line:#33332f; --accent:#8fb0ff; --err:#ff8a80; } }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.45 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+  main { max-width:1100px; margin:0 auto; padding:24px 16px; }
+  h1 { font-size:22px; margin:0 0 4px; }
+  p.sub { color:var(--muted); margin:0 0 20px; }
+  form { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px;
+         display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
+  label { display:flex; flex-direction:column; font-size:13px; color:var(--muted); gap:4px; }
+  label.check { flex-direction:row; align-items:center; gap:6px; }
+  input[type=text] { font:inherit; padding:7px 9px; border:1px solid var(--line); border-radius:6px; background:var(--bg); color:var(--fg); }
+  .actions { display:flex; gap:8px; align-items:end; }
+  button, a.btn { font:inherit; padding:8px 14px; border-radius:6px; border:1px solid var(--accent); background:var(--accent); color:#fff; text-decoration:none; cursor:pointer; }
+  a.btn.secondary { background:transparent; color:var(--accent); }
+  .error { color:var(--err); margin:16px 0; }
+  .meta { margin:16px 0 8px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  .table-wrap { overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:10px; }
+  table { border-collapse:collapse; width:100%; font-size:14px; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th { font-weight:600; color:var(--muted); }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Audit log search</h1>
+  <p class="sub">Local only (127.0.0.1). Search by transaction ID or by date range, then narrow with filters.</p>
+  <form method="get" action="/">
+    <label>Transaction ID <input type="text" name="transaction_id" value="{{ form.transaction_id }}" placeholder="TX-000123"></label>
+    <label class="check"><input type="checkbox" name="prefix" {% if form.prefix == 'on' %}checked{% endif %}> Prefix match</label>
+    <label>From date <input type="text" name="start" value="{{ form.start }}" placeholder="2026-01-01"></label>
+    <label>To date <input type="text" name="end" value="{{ form.end }}" placeholder="2026-03-31"></label>
+    <label>Account <input type="text" name="account" value="{{ form.account }}"></label>
+    <label>User <input type="text" name="user" value="{{ form.user }}"></label>
+    <label>Action <input type="text" name="action" value="{{ form.action }}" placeholder="DEPOSIT"></label>
+    <label>Min amount <input type="text" name="min_amount" value="{{ form.min_amount }}"></label>
+    <label>Max amount <input type="text" name="max_amount" value="{{ form.max_amount }}"></label>
+    <div class="actions"><button type="submit">Search</button><a class="btn secondary" href="/">Clear</a></div>
+  </form>
+
+  {% if error %}<p class="error" role="alert">Error: {{ error }}</p>{% endif %}
+
+  {% if results is not none and not error %}
+    <div class="meta">
+      <span>{{ total }} result{{ '' if total == 1 else 's' }}{% if total > max_rows %} (showing first {{ max_rows }}){% endif %}</span>
+      {% if total %}<a class="btn secondary" href="/export.csv?{{ query_string }}">Export CSV</a>{% endif %}
+    </div>
+    {% if results %}
+    <div class="table-wrap"><table>
+      <thead><tr><th>Transaction ID</th><th>Event date (UTC)</th><th>Action</th><th>Amount</th><th>Account</th><th>User</th><th>Source file</th></tr></thead>
+      <tbody>
+      {% for tx in results %}
+        <tr><td>{{ tx.transaction_id }}</td><td>{{ tx.event_date }}</td><td>{{ tx.action_type or '-' }}</td>
+            <td class="num">{{ money(tx.amount_cents) or '-' }}</td><td>{{ tx.account_id or '-' }}</td><td>{{ tx.user_id or '-' }}</td><td>{{ tx.source_file or '-' }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table></div>
+    {% else %}<p>No results.</p>{% endif %}
+  {% endif %}
+</main>
+</body>
+</html>

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "audit-log-search"
-version = "0.1.0"
+version = "1.0.0"
 description = "Offline CLI that indexes financial audit logs (CSV/JSON) in SQLite and searches them by transaction ID or date range."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -20,7 +20,7 @@ audit-search = "audit_search.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-audit_search = ["storage/schema.sql"]
+audit_search = ["storage/schema.sql", "web/templates/*.html"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
