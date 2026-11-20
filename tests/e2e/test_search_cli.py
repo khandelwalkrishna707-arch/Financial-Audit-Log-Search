@@ -35,7 +35,7 @@ def run(capsys, *args):
 def test_find_exact_id(db, capsys):
     code, out, _ = run(capsys, "find", "--id", "TX-1002", "--db", db)
     assert code == 0
-    assert "2026-03-14T09:30:00Z\tTX-1002\tWITHDRAWAL\t1000.50\tAC-2\tu2" in out
+    assert "TX-1002         2026-03-14T09:30:00Z  WITHDRAWAL   1000.50  AC-2        u2" in out
     assert out.strip().endswith("1 result")
 
 
@@ -47,7 +47,7 @@ def test_find_prefix(db, capsys):
 
 def test_missing_values_are_shown_as_a_dash(db, capsys):
     _, out, _ = run(capsys, "find", "--id", "TX-1004", "--db", db)
-    assert "2026-03-15T00:00:00Z\tTX-1004\tDEPOSIT\t-\tAC-4\tu4" in out
+    assert "TX-1004         2026-03-15T00:00:00Z  DEPOSIT           -  AC-4        u4" in out
 
 
 def test_range_includes_whole_end_day(db, capsys):
@@ -102,3 +102,38 @@ def test_queries_under_50ms_on_10k_records(tmp_path):
             timings.append(time.perf_counter() - started)
 
     assert max(timings) < 0.050, f"slowest query took {max(timings) * 1000:.1f} ms"
+
+
+def test_export_and_filters(db, capsys, tmp_path):
+    out_csv = tmp_path / "out.csv"
+    code, out, _ = run(capsys, "range", "--from", "2026-03-01", "--to", "2026-03-31",
+                       "--action", "deposit", "--export", str(out_csv), "--db", db)
+    assert code == 0
+    assert "2 results" in out and f"Exported 2 rows to {out_csv}" in out
+    assert out_csv.read_text(encoding="utf-8").splitlines()[0].startswith("transaction_id,")
+
+
+def test_export_one_row_and_empty(db, capsys, tmp_path):
+    code, out, _ = run(capsys, "find", "--id", "TX-1001", "--export", str(tmp_path / "a.csv"),
+                       "--db", db)
+    assert code == 0 and "Exported 1 row to" in out
+    code, out, _ = run(capsys, "find", "--id", "NOPE", "--export", str(tmp_path / "b.csv"),
+                       "--db", db)
+    assert code == 0 and "No results." in out and "Exported 0 rows" in out
+    assert (tmp_path / "b.csv").read_text(encoding="utf-8").count("\n") == 1
+
+
+def test_export_write_error(db, capsys, tmp_path):
+    code, _, err = run(capsys, "find", "--id", "TX-1001", "--export",
+                       str(tmp_path / "missing" / "a.csv"), "--db", db)
+    assert code == 1 and err.startswith("error: could not write")
+
+
+def test_bad_filter_is_reported(db, capsys):
+    code, _, err = run(capsys, "find", "--id", "TX-1001", "--min-amount", "abc", "--db", db)
+    assert code == 1 and "bad minimum amount" in err
+
+
+def test_menu_command(db, monkeypatch):
+    monkeypatch.setattr("builtins.input", lambda prompt: "5")
+    assert main(["menu", "--db", db]) == 0

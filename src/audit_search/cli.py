@@ -4,8 +4,10 @@ Commands
   import  -> load a CSV/JSON/JSONL audit log into the database
   find    -> look up a transaction ID (exact or --prefix)
   range   -> list events between two dates (both included)
-  menu    -> TODO (week 2): interactive terminal menu
-  --export on find/range -> TODO (week 2): CSV export
+  menu    -> interactive terminal menu
+  web     -> local Flask dashboard on 127.0.0.1 (needs: pip install ".[web]")
+  --export on find/range writes the results to CSV; --account/--user/--action and
+  --min-amount/--max-amount narrow the results.
 
 The CLI only reads arguments, calls the service functions and prints results.
 It holds no business logic of its own, so the menu and the web UI can reuse the same services.
@@ -22,10 +24,12 @@ from pathlib import Path
 
 from audit_search import __version__
 from audit_search.config import DEFAULT_DB_PATH, DEFAULT_DUPLICATE_POLICY, DUPLICATE_POLICIES
+from audit_search.export.csv_writer import ExportError, write_csv
+from audit_search.export.formatter import format_table
 from audit_search.importer import import_file
-from audit_search.models import ImportSummary, Transaction
-from audit_search.normalize.fields import cents_to_str
-from audit_search.search.queries import find_by_date_range, find_by_id, find_by_prefix
+from audit_search.models import ImportSummary
+from audit_search.search.filters import Filters
+from audit_search.search.service import search
 from audit_search.storage.database import connect
 
 REJECTIONS_SHOWN = 20
@@ -61,20 +65,35 @@ def build_parser() -> argparse.ArgumentParser:
     p_find = commands.add_parser("find", parents=[common], help="find events by transaction ID")
     p_find.add_argument("--id", required=True, dest="transaction_id", help="transaction ID")
     p_find.add_argument("--prefix", action="store_true", help="match IDs that start with --id")
-    p_find.add_argument("--export", type=Path, help="write the results to this CSV file (TODO)")
+    _add_result_options(p_find)
     p_find.set_defaults(handler=cmd_find)
 
     p_range = commands.add_parser("range", parents=[common], help="list events in a date range")
     p_range.add_argument("--from", required=True, dest="start", help="start date (inclusive)")
     p_range.add_argument("--to", required=True, dest="end", help="end date (inclusive)")
-    p_range.add_argument("--export", type=Path, help="write the results to this CSV file (TODO)")
+    _add_result_options(p_range)
     p_range.set_defaults(handler=cmd_range)
 
-    # ---- TODO week 2 (see docs/remaining_work.md) --------------------------------------
+    # ---- interactive front ends -------------------------------------------------------
     p_menu = commands.add_parser("menu", parents=[common], help="interactive terminal menu")
-    p_menu.set_defaults(handler=_not_built_yet)
+    p_menu.set_defaults(handler=cmd_menu)
+
+    p_web = commands.add_parser(
+        "web", parents=[common], help="local web dashboard on 127.0.0.1 (needs Flask)"
+    )
+    p_web.add_argument("--port", type=int, default=5000, help="port (default: %(default)s)")
+    p_web.set_defaults(handler=cmd_web)
 
     return parser
+
+
+def _add_result_options(command: argparse.ArgumentParser) -> None:
+    command.add_argument("--export", type=Path, help="also write the results to this CSV file")
+    command.add_argument("--account", help="only events for this account ID")
+    command.add_argument("--user", help="only events by this user ID")
+    command.add_argument("--action", help="only this action type, e.g. DEPOSIT")
+    command.add_argument("--min-amount", help="only amounts >= this, e.g. 100.00")
+    command.add_argument("--max-amount", help="only amounts <= this")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -120,52 +139,57 @@ def print_import_summary(summary: ImportSummary, seconds: float) -> None:
 
 
 def cmd_find(args: argparse.Namespace) -> int:
-    search = find_by_prefix if args.prefix else find_by_id
-    return _run_search(args, lambda conn: search(conn, args.transaction_id))
+    return _run_search(args, transaction_id=args.transaction_id, prefix=args.prefix)
 
 
 def cmd_range(args: argparse.Namespace) -> int:
-    return _run_search(args, lambda conn: find_by_date_range(conn, args.start, args.end))
+    return _run_search(args, start=args.start, end=args.end)
 
 
-def _run_search(args: argparse.Namespace, search) -> int:
-    if args.export:
-        print("error: --export is not built yet (CSV export has its own issue)", file=sys.stderr)
-        return 2
+def _run_search(args: argparse.Namespace, **criteria) -> int:
     if not Path(args.db).is_file():
         # sqlite3 would silently create an empty database and report "No results."
         print(f"error: database not found: {args.db} (run 'audit-search import' first)",
               file=sys.stderr)
         return 1
     try:
+        filters = Filters.from_text(args.account, args.user, args.action,
+                                    args.min_amount, args.max_amount)
         with closing(connect(args.db)) as conn:
-            results = search(conn)
+            results = search(conn, filters=filters, **criteria)
     except (ValueError, sqlite3.Error) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
-    print_results(results)
+    print(format_table(results))
+    if args.export:
+        try:
+            written = write_csv(results, args.export)
+        except ExportError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 1
+        print(f"Exported {written} row{'s' if written != 1 else ''} to {args.export}")
     return 0
 
 
-def print_results(results: list[Transaction]) -> None:
-    """Plain tab-separated output. The aligned table (export/formatter.py) has its own issue."""
-    if not results:
-        print("No results.")
-        return
-    print("event_date\ttransaction_id\taction_type\tamount\taccount_id\tuser_id")
-    for tx in results:
-        fields = (tx.event_date, tx.transaction_id, tx.action_type,
-                  cents_to_str(tx.amount_cents), tx.account_id, tx.user_id)
-        print("\t".join(value or "-" for value in fields))
-    print(f"{len(results)} result{'s' if len(results) != 1 else ''}")
+def cmd_menu(args: argparse.Namespace) -> int:
+    from audit_search.menu import run_menu
+
+    return run_menu(args.db)
 
 
-def _not_built_yet(args: argparse.Namespace) -> int:
-    print(
-        f"'{args.command}' is not built yet - see docs/remaining_work.md",
-        file=sys.stderr,
-    )
-    return 2
+def cmd_web(args: argparse.Namespace) -> int:
+    try:
+        from audit_search.web import create_app
+    except ImportError:
+        print('error: the web UI needs Flask. Install it with: pip install ".[web]"',
+              file=sys.stderr)
+        return 1
+    from audit_search.web import HOST
+
+    app = create_app(args.db)
+    print(f"Audit search dashboard on http://{HOST}:{args.port} (Ctrl+C to stop)")
+    app.run(host=HOST, port=args.port, debug=False)
+    return 0
 
 
 if __name__ == "__main__":
