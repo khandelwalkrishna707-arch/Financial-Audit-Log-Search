@@ -40,11 +40,13 @@ looks right but has two problems:
 2. SQLite's `LIKE` is case-insensitive, so it **can't use the index** on a normal column. Every
    search then reads the whole table and you miss the 50 ms target on big databases.
 
-Use a range instead, which uses the index and has no wildcards:
+Fix (issue #4): escape the user's text, use `ESCAPE '\'`, turn on
+`PRAGMA case_sensitive_like = ON` and force the index with `INDEXED BY idx_tx_id`:
 
 ```python
-upper = prefix[:-1] + chr(ord(prefix[-1]) + 1)   # "TX-98" -> "TX-99"
-# WHERE transaction_id >= ? AND transaction_id < ?     params: (prefix, upper)
+pattern = prefix.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+# SELECT ... FROM audit_events INDEXED BY idx_tx_id
+#  WHERE transaction_id LIKE ? ESCAPE '\'           params: (pattern,)
 ```
 
 Refuse an empty prefix with a `ValueError`; otherwise it would return everything.
