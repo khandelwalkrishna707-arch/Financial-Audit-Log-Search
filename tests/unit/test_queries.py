@@ -1,4 +1,4 @@
-"""Search queries (issue #2): exact ID, prefix and inclusive date range."""
+"""Search queries (issues #2 and #4): exact ID, prefix and inclusive date range."""
 
 import sqlite3
 
@@ -34,6 +34,7 @@ def db(conn):
             event("AXB", "2026-02-01T00:00:00Z"),
             event("A_B", "2026-02-02T00:00:00Z"),
             event("tx-1", "2026-02-03T00:00:00Z"),
+            event("A\\B", "2026-05-01T00:00:00Z"),  # backslash = the LIKE escape character
         ],
         "skip",
     )
@@ -88,27 +89,43 @@ def test_prefix_matches_ids_that_start_with_it(db):
     assert [tx.event_date for tx in results] == sorted(tx.event_date for tx in results)
 
 
-@pytest.mark.parametrize(("prefix", "expected"), [("A%", ["A%B"]), ("A_", ["A_B"]), ("A", None)])
-def test_percent_and_underscore_are_not_wildcards(db, prefix, expected):
-    found = ids(find_by_prefix(db, prefix))
-    assert found == (expected or ["A%B", "AXB", "A_B"])
+@pytest.mark.parametrize(
+    ("prefix", "expected"),
+    [
+        ("A%", ["A%B"]),
+        ("A_", ["A_B"]),
+        ("A\\", ["A\\B"]),
+        ("A%B", ["A%B"]),
+        ("A", ["A%B", "AXB", "A_B", "A\\B"]),
+    ],
+)
+def test_percent_underscore_and_backslash_are_not_wildcards(db, prefix, expected):
+    assert ids(find_by_prefix(db, prefix)) == expected
 
 
 def test_prefix_is_case_sensitive(db):
     assert "tx-1" not in ids(find_by_prefix(db, "TX-"))
+    assert ids(find_by_prefix(db, "tx-")) == ["tx-1"]
+
+
+def test_prefix_is_case_sensitive_even_if_the_connection_had_it_off(db):
+    db.execute("PRAGMA case_sensitive_like = OFF")  # SQLite's default
+    assert "tx-1" not in ids(find_by_prefix(db, "TX-"))
+
+
+def test_prefix_has_full_precision_and_recall(db):
+    every_id = {row[0] for row in db.execute("SELECT transaction_id FROM audit_events")}
+    for prefix in ["TX-", "TX-1", "TX-10", "A", "A%", "tx", "Z"]:
+        expected = sorted(i for i in every_id if i.startswith(prefix))
+        assert sorted(set(ids(find_by_prefix(db, prefix)))) == expected, prefix
 
 
 @pytest.mark.parametrize(
-    ("prefix", "upper"),
-    [("TX-98", "TX-99"), ("AB~", "AB\x7f"), ("X" + chr(0xD7FF), "X" + chr(0xE000))],
+    ("prefix", "pattern"),
+    [("TX-98", "TX-98%"), ("A%B", "A\\%B%"), ("A_B", "A\\_B%"), ("A\\B", "A\\\\B%")],
 )
-def test_prefix_upper_bound(prefix, upper):
-    assert queries._prefix_upper_bound(prefix) == upper
-
-
-def test_prefix_ending_with_last_unicode_character_is_refused():
-    with pytest.raises(ValueError, match="unsupported character"):
-        queries._prefix_upper_bound("A" + chr(0x10FFFF))
+def test_like_prefix_escapes_wildcards(prefix, pattern):
+    assert queries._like_prefix(prefix) == pattern
 
 
 # --------------------------------------------------------------------------- date range
@@ -177,15 +194,25 @@ def test_bad_date_ranges_give_clear_errors(db, start, end, message):
 @pytest.mark.parametrize(
     ("sql", "params", "index"),
     [
-        (queries._BY_ID_SQL, ("TX-1",), "sqlite_autoindex_audit_events_1"),
-        (queries._BY_PREFIX_SQL, ("TX-1", "TX-2"), "sqlite_autoindex_audit_events_1"),
+        (queries._BY_ID_SQL, ("TX-1",), "idx_tx_id"),
+        (queries._BY_PREFIX_SQL, ("TX-1%",), "idx_tx_id"),
         (queries._BY_DATE_RANGE_SQL, ("2026-01-01T00:00:00Z", "2026-04-01T00:00:00Z"),
          "idx_tx_date"),
     ],
 )
 def test_every_query_uses_an_index(db, sql, params, index):
+    db.execute(queries._CASE_SENSITIVE_LIKE_SQL)  # as find_by_prefix does
     plan = " ".join(row[3] for row in db.execute("EXPLAIN QUERY PLAN " + sql, params))
-    assert f"USING INDEX {index}" in plan, plan
+    assert f"INDEX {index} " in plan, plan  # "USING INDEX" or "USING COVERING INDEX"
+    assert "SCAN" not in plan, plan
+
+
+def test_prefix_search_is_an_index_range_not_a_scan(db):
+    db.execute(queries._CASE_SENSITIVE_LIKE_SQL)
+    plan = " ".join(
+        row[3] for row in db.execute("EXPLAIN QUERY PLAN " + queries._BY_PREFIX_SQL, ("TX-1%",))
+    )
+    assert "idx_tx_id (transaction_id>? AND transaction_id<?)" in plan, plan
 
 
 def test_queries_work_on_a_plain_connection():

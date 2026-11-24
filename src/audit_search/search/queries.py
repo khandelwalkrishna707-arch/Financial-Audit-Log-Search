@@ -5,8 +5,9 @@ Rules every query follows:
     with f-strings, + or .format() (tests/unit/test_sql_safety.py enforces this).
   * Results are always sorted by event_date, transaction_id, action_type, so the same
     search always gives the same order.
-  * Every query can use an index (checked by EXPLAIN QUERY PLAN in the tests):
-      - ID and prefix searches use the UNIQUE (transaction_id, ...) index,
+  * Every query uses an index (checked by EXPLAIN QUERY PLAN in the tests):
+      - ID and prefix searches use idx_tx_id (named with INDEXED BY, so SQLite can't pick
+        another index),
       - date searches use idx_tx_date.
 """
 
@@ -20,17 +21,20 @@ from audit_search.normalize.dates import ISO_UTC_FORMAT, normalize_date, parse_d
 
 _BY_ID_SQL = """
     SELECT transaction_id, event_date, account_id, action_type, amount_cents, user_id, source_file
-      FROM audit_events
+      FROM audit_events INDEXED BY idx_tx_id
      WHERE transaction_id = ?
      ORDER BY event_date, transaction_id, action_type
 """
 
-# A prefix search is a RANGE search: every ID that starts with "TX-98" sorts at or after
-# "TX-98" and before "TX-99". Unlike LIKE, this uses the index and has no wildcards.
+# A prefix search is `LIKE 'TX-98%'`. The user's text is escaped first (see _like_prefix), so
+# `%` and `_` typed by the user are plain characters. SQLite only turns LIKE into an index
+# range search when LIKE is case-sensitive, so find_by_prefix() turns on
+# PRAGMA case_sensitive_like before running it. That also makes "TX-" not match "tx-1".
+_LIKE_ESCAPE = "\\"
 _BY_PREFIX_SQL = """
     SELECT transaction_id, event_date, account_id, action_type, amount_cents, user_id, source_file
-      FROM audit_events
-     WHERE transaction_id >= ? AND transaction_id < ?
+      FROM audit_events INDEXED BY idx_tx_id
+     WHERE transaction_id LIKE ? ESCAPE '\\'
      ORDER BY event_date, transaction_id, action_type
 """
 
@@ -42,8 +46,7 @@ _BY_DATE_RANGE_SQL = """
      ORDER BY event_date, transaction_id, action_type
 """
 
-_LAST_UNICODE_CHAR = 0x10FFFF
-_SURROGATES = range(0xD800, 0xE000)  # cannot appear in stored text, so skip over them
+_CASE_SENSITIVE_LIKE_SQL = "PRAGMA case_sensitive_like = ON"
 
 
 def row_to_transaction(row: sqlite3.Row) -> Transaction:
@@ -64,12 +67,23 @@ def find_by_id(conn: sqlite3.Connection, transaction_id: str) -> list[Transactio
 def find_by_prefix(conn: sqlite3.Connection, prefix: str) -> list[Transaction]:
     """All events whose transaction_id STARTS WITH `prefix` (e.g. "TX-98" finds "TX-98721").
 
-    `%` and `_` are ordinary characters here, not wildcards.
+    `%` and `_` are ordinary characters here, not wildcards. The match is case-sensitive.
+    Note: this turns on `PRAGMA case_sensitive_like` for `conn` (needed for correct,
+    index-backed results), which also affects any other LIKE run on that connection.
     """
     start = prefix.strip()
     if not start:
         raise ValueError("prefix must not be empty")
-    return _run(conn, _BY_PREFIX_SQL, (start, _prefix_upper_bound(start)))
+    conn.execute(_CASE_SENSITIVE_LIKE_SQL)
+    return _run(conn, _BY_PREFIX_SQL, (_like_prefix(start),))
+
+
+def _like_prefix(prefix: str) -> str:
+    """Turn "A%B_" into the LIKE pattern "A\\%B\\_%": escape the escape character first,
+    then the wildcards, then add one real `%` at the end."""
+    escaped = prefix.replace(_LIKE_ESCAPE, _LIKE_ESCAPE * 2)
+    escaped = escaped.replace("%", _LIKE_ESCAPE + "%").replace("_", _LIKE_ESCAPE + "_")
+    return escaped + "%"
 
 
 def find_by_date_range(conn: sqlite3.Connection, start: str, end: str) -> list[Transaction]:
@@ -107,20 +121,6 @@ def _is_date_only(text: str, moment: datetime) -> bool:
     """True for inputs like "2026-03-31", "31/03/2026" or "20260331" (no time written)."""
     is_epoch = text.strip().isdigit() and len(text.strip()) >= 9
     return moment.time() == time(0, 0) and ":" not in text and not is_epoch
-
-
-def _prefix_upper_bound(prefix: str) -> str:
-    """The first string that sorts after every string starting with `prefix`.
-
-    "TX-98" -> "TX-99"; "AB~" -> "AB\x7f". Text is compared by Unicode code point,
-    which is the same order SQLite uses for UTF-8 text.
-    """
-    code = ord(prefix[-1]) + 1
-    if code in _SURROGATES:
-        code = _SURROGATES.stop
-    if code > _LAST_UNICODE_CHAR:
-        raise ValueError("prefix ends with an unsupported character")
-    return prefix[:-1] + chr(code)
 
 
 def _run(conn: sqlite3.Connection, sql: str, params: tuple[str, ...]) -> list[Transaction]:
