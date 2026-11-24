@@ -194,12 +194,14 @@ CREATE TABLE IF NOT EXISTS audit_events (
 CREATE INDEX IF NOT EXISTS idx_tx_date ON audit_events (event_date);
 ```
 
-**Why searches are fast:** SQLite builds a **B-tree index** for the `UNIQUE` constraint, and
-because it *starts with* `transaction_id`, it serves every ID lookup. I checked this with
+**Why searches are fast:** ID and prefix searches use the **B-tree index** `idx_tx_id`
+(named with `INDEXED BY`). Prefix search is an escaped `LIKE 'TX-98%'` run with
+`PRAGMA case_sensitive_like = ON`, which SQLite turns into an index range. I checked this with
 `EXPLAIN QUERY PLAN`:
 
 ```
-SEARCH audit_events USING INDEX sqlite_autoindex_audit_events_1 (transaction_id=?)
+SEARCH audit_events USING COVERING INDEX idx_tx_id (transaction_id=?)
+SEARCH audit_events USING INDEX idx_tx_id (transaction_id>? AND transaction_id<?)
 ```
 
 `idx_tx_date` serves date-range searches. A B-tree lookup takes about *log₂(n)* steps: around
@@ -243,10 +245,11 @@ While building, I found six problems in the PRD and fixed them:
 | 3 | Python's `json.load` **reads the whole file into memory**, which breaks the streaming promise | Wrote a streaming JSON reader with `JSONDecoder.raw_decode` (still standard library only), plus JSON Lines support |
 | 4 | Dates **without a timezone** had no rule | Rule: treat them as UTC (documented in `docs/date_formats.md`) |
 | 5 | `--to 2026-03-31` becomes midnight, so `BETWEEN` **misses the rest of the last day** | Documented. The search code in week 2 will use `< next day` |
-| 6 | Prefix search with `LIKE` **can't use the index** in SQLite, and `%` / `_` act as wildcards | Week 2 will use an index-friendly range query instead |
+| 6 | Prefix search with `LIKE` **can't use the index** in SQLite, and `%` / `_` act as wildcards | Escape `\`, `%` and `_` (`ESCAPE '\'`) and turn on `PRAGMA case_sensitive_like`, so `LIKE` is exact and uses the index (#4) |
 
-Also, `idx_tx_id` is not created separately, because the `UNIQUE` constraint's index already covers
-`transaction_id` and a second index would only slow down imports.
+`idx_tx_id` is a separate index on `transaction_id` (#4). The `UNIQUE` constraint's index also
+starts with `transaction_id`, so `INDEXED BY idx_tx_id` is used to make the plan predictable.
+The cost is a little extra work per imported row.
 
 ---
 

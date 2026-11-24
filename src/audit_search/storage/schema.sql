@@ -10,11 +10,13 @@ CREATE TABLE IF NOT EXISTS audit_events (
     source_file    TEXT,
 
     -- Duplicate rule: the same transaction, at the same moment, doing the same action,
-    -- is the same audit event. SQLite builds a B-tree index for this constraint, and because
-    -- it STARTS with transaction_id it also serves every transaction-ID lookup.
-    -- (That is why there is no separate idx_tx_id index: it would be a duplicate.)
+    -- is the same audit event.
     UNIQUE (transaction_id, event_date, action_type)
 );
 
 -- B-tree index for date-range searches. ISO UTC text sorts in time order.
 CREATE INDEX IF NOT EXISTS idx_tx_date ON audit_events (event_date);
+
+-- B-tree index for transaction-ID searches (exact `= ?` and prefix `LIKE ?`).
+-- The search queries name it with INDEXED BY, so they always use it (issue #4).
+CREATE INDEX IF NOT EXISTS idx_tx_id ON audit_events (transaction_id);

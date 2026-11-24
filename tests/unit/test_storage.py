@@ -12,9 +12,10 @@ def tx(tx_id="TX-1", date="2026-01-01T00:00:00Z", action="DEPOSIT", amount=100, 
     return Transaction(tx_id, date, "AC-1", action, amount, "u1", source)
 
 
-def test_schema_has_date_index_and_unique_key(conn):
+def test_schema_has_id_and_date_indexes_and_unique_key(conn):
     indexes = {row["name"] for row in conn.execute("PRAGMA index_list(audit_events)")}
     assert "idx_tx_date" in indexes
+    assert "idx_tx_id" in indexes
     assert any(name.startswith("sqlite_autoindex_audit_events") for name in indexes)
 
 
@@ -25,6 +26,15 @@ def test_connect_is_idempotent(tmp_path):
     first.close()
     with closing(connect(db)) as again:  # opening again must not fail or wipe data
         assert count_events(again) == 1
+
+
+def test_connect_adds_idx_tx_id_to_an_older_database(tmp_path):
+    db = tmp_path / "old.db"
+    with closing(connect(db)) as first:
+        first.execute("DROP INDEX idx_tx_id")  # a database made before issue #4
+    with closing(connect(db)) as again:
+        indexes = {row["name"] for row in again.execute("PRAGMA index_list(audit_events)")}
+        assert "idx_tx_id" in indexes
 
 
 def test_insert_new_rows(conn):
